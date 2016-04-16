@@ -6,8 +6,11 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by Wayne on 4/9/2016.
@@ -66,7 +69,7 @@ public class DBHandler extends SQLiteOpenHelper {
                 TABLE_ATTENDANCE + "("
                 + COLUMN_ID + " INTEGER PRIMARY KEY, "
                 + "studentcourseid INTEGER, "
-                + COLUMN_DATE + " Text, "
+                + COLUMN_DATE + " TEXT, "
                 + COLUMN_PRESENT + " Integer, "
                 + "FOREIGN KEY(studentcourseid) REFERENCES "
                 + TABLE_STUDENTINCOURSE + "(id))";
@@ -117,7 +120,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
     public void addAttendance(Attendance attendance) {
         ContentValues values = new ContentValues();
-        values.put(COLUMN_ID, attendance.getStudentInCourse().getId());
+        values.put("studentcourseid", attendance.getStudentInCourse().getId());
         values.put(COLUMN_DATE, attendance.getDate());
         values.put(COLUMN_PRESENT, attendance.getPresent());
 
@@ -127,8 +130,9 @@ public class DBHandler extends SQLiteOpenHelper {
         db.close();
     }
 
-    public Student findStudent(String firstName) {
-        String query = "Select * FROM " + TABLE_STUDENT + " WHERE " + COLUMN_FIRSTNAME + " =  \"" + firstName + "\"";
+    public Student findStudent(String firstName, String lastName) {
+        String query = "Select * FROM " + TABLE_STUDENT + " WHERE " + COLUMN_FIRSTNAME + " =  \"" + firstName + "\""
+                + " AND " + COLUMN_LASTNAME + " =  \"" + lastName + "\"";
 
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -147,6 +151,26 @@ public class DBHandler extends SQLiteOpenHelper {
         }
         db.close();
         return student;
+    }
+
+    public int checkIfStudentExists(String firstName, String lastName) {
+        String query = "Select COUNT(*) FROM " + TABLE_STUDENT + " WHERE " + COLUMN_FIRSTNAME + " =  \"" + firstName + "\""
+                + " AND " + COLUMN_LASTNAME + " =  \"" + lastName + "\"";
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        Cursor cursor = db.rawQuery(query, null);
+        int count;
+        if (cursor.moveToFirst()) {
+            cursor.moveToFirst();
+            count = Integer.parseInt(cursor.getString(0));
+            cursor.close();
+        } else {
+            count = 0;
+        }
+
+        db.close();
+        return count;
     }
 
     public Course findCourse(String courseName) {
@@ -170,8 +194,111 @@ public class DBHandler extends SQLiteOpenHelper {
         return course;
     }
 
+    public int checkIfCourseExists(String courseName) {
+        String query = "Select COUNT(*) FROM " + TABLE_COURSE + " WHERE " + COLUMN_COURSENAME + " =  \"" + courseName + "\"";
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        Cursor cursor = db.rawQuery(query, null);
+        int count;
+        if (cursor.moveToFirst()) {
+            cursor.moveToFirst();
+            count = Integer.parseInt(cursor.getString(0));
+            cursor.close();
+        } else {
+            count = 0;
+        }
+
+        db.close();
+        return count;
+    }
+
+    public int checkIfStudentInCourseExists(Student student, Course course) {
+        String query = "Select COUNT(*) FROM " + TABLE_STUDENTINCOURSE
+                + " WHERE " + COLUMN_STUDENTID + " =  \"" + student.getStudentID() + "\""
+                + " AND " + COLUMN_COURSEID + " =  \"" + course.getCourseID() + "\"";
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        Cursor cursor = db.rawQuery(query, null);
+        int count;
+        if (cursor.moveToFirst()) {
+            cursor.moveToFirst();
+            count = Integer.parseInt(cursor.getString(0));
+            cursor.close();
+        } else {
+            count = 0;
+        }
+
+        db.close();
+        return count;
+    }
+
+    public int checkIfAttendanceExists(Attendance attendance) {
+        String query = "Select COUNT(*) FROM " + TABLE_ATTENDANCE
+                + " WHERE studentcourseid =  \"" + attendance.getStudentInCourse().getId() + "\""
+                + " AND " + COLUMN_DATE + " =  \"" + attendance.getDate() + "\"";
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        Cursor cursor = db.rawQuery(query, null);
+        int count;
+        if (cursor.moveToFirst()) {
+            cursor.moveToFirst();
+            count = Integer.parseInt(cursor.getString(0));
+            cursor.close();
+        } else {
+            count = 0;
+        }
+
+        db.close();
+        return count;
+    }
+
+    public int checkIfAttendanceExists(Course course) {
+        String query = "Select COUNT(*) FROM " + TABLE_ATTENDANCE
+                + " JOIN studentincourse ON attendance.studentcourseid = studentincourse.id "
+                + " WHERE courseid =  \"" + course.getCourseID() + "\""
+                + " AND " + COLUMN_DATE + " =  \"" + getDateTime() + "\"";
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        Cursor cursor = db.rawQuery(query, null);
+        int count;
+        if (cursor.moveToFirst()) {
+            cursor.moveToFirst();
+            count = Integer.parseInt(cursor.getString(0));
+            cursor.close();
+        } else {
+            count = 0;
+        }
+
+        db.close();
+        return count;
+    }
+
+    public int checkIfCourseHasStudents(Course course) {
+        String query = "Select COUNT(*) FROM " + TABLE_STUDENTINCOURSE
+                + " WHERE courseid =  \"" + course.getCourseID() + "\"";
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        Cursor cursor = db.rawQuery(query, null);
+        int count;
+        if (cursor.moveToFirst()) {
+            cursor.moveToFirst();
+            count = Integer.parseInt(cursor.getString(0));
+            cursor.close();
+        } else {
+            count = 0;
+        }
+
+        db.close();
+        return count;
+    }
+
     public List<Student> getAllStudents() {
-        List<Student> students = new ArrayList<Student>();
+        List<Student> students = new ArrayList<>();
 
         String query = "Select * FROM " + TABLE_STUDENT ;
 
@@ -199,7 +326,7 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
     public List<Course> getAllCourses() {
-        List<Course> courses = new ArrayList<Course>();
+        List<Course> courses = new ArrayList<>();
 
         String query = "Select * FROM " + TABLE_COURSE ;
 
@@ -226,7 +353,7 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
     public List<StudentInCourse> getAllStudentsInCourse(int courseID) {
-        List<StudentInCourse> students = new ArrayList<StudentInCourse>();
+        List<StudentInCourse> students = new ArrayList<>();
 
         String query = "Select id, student.studentid, firstname, lastname "
             + "FROM student JOIN studentincourse ON student.studentid = studentincourse.studentid "
@@ -259,6 +386,35 @@ public class DBHandler extends SQLiteOpenHelper {
         return students;
     }
 
+    public ArrayList<Attendance> getAllAttendance() {
+        ArrayList<Attendance> attendances = new ArrayList<>();
+
+        String query = "Select * FROM " + TABLE_ATTENDANCE ;
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                do {
+                    Attendance attendance = new Attendance();
+                    attendance.setId(Integer.parseInt(cursor.getString(0)));
+                    //attendance.setStudentInCourse(Integer.parseInt(cursor.getString(1)));
+                    attendance.setDate(cursor.getString(2));
+                    attendance.setPresent(Integer.parseInt(cursor.getString(3)));
+
+                    attendances.add(attendance);
+                } while (cursor.moveToNext());
+
+            }
+            cursor.close();
+        }
+
+        db.close();
+        return attendances;
+    }
+
     public void rebuildDB() {
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_STUDENT);
@@ -266,5 +422,12 @@ public class DBHandler extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_STUDENTINCOURSE);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_ATTENDANCE);
         onCreate(db);
+    }
+
+    private String getDateTime() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat(
+                "yyyy-MM-dd", Locale.getDefault());
+        Date date = new Date();
+        return dateFormat.format(date);
     }
 }

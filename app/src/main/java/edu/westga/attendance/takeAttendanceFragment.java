@@ -7,13 +7,17 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.ToggleButton;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by Wayne on 4/15/2016.
@@ -23,11 +27,11 @@ import java.util.List;
 public class takeAttendanceFragment extends DialogFragment {
     private LinearLayout mLinearListView;
     private int courseid;
-    private ArrayList<Attendance> attendance = new ArrayList<Attendance>();
-    private Date dNow = new Date();
+    private ArrayList<Attendance> attendance = new ArrayList<>();
+    private TakeAttendanceListener listener;
 
     interface TakeAttendanceListener {
-        void onTakeAttendance();
+        void onTakeAttendance(ArrayList<Attendance> attendance);
     }
 
     public takeAttendanceFragment() {
@@ -53,11 +57,11 @@ public class takeAttendanceFragment extends DialogFragment {
         courseName.setText("Course");
 
         for (int i=0; i<students.size(); i++) {
-            Attendance newAttendance = new Attendance(students.get(i), dNow.toString(), 1);
+            Attendance newAttendance = new Attendance(students.get(i), getDateTime(), 1);
             attendance.add(newAttendance);
 
-            LayoutInflater inflater1 = null;
-            inflater1 = (LayoutInflater) this.getActivity().getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            // inflater1 = null;
+            LayoutInflater inflater1 = (LayoutInflater) this.getActivity().getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View mLinearView = inflater1.inflate(R.layout.student_list_detail, null);
 
             final TextView firstName = (TextView) mLinearView.findViewById(R.id.textViewName);
@@ -74,11 +78,18 @@ public class takeAttendanceFragment extends DialogFragment {
 
             mLinearListView.addView(mLinearView);
 
+            final Button saveButton = (Button) theView.findViewById(R.id.saveButton);
+            saveButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    saveButtonClicked(v);
+                }
+            });
+
             toggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     if (isChecked) {
                         toggle.setBackgroundColor(Color.RED);
-                        textid.setVisibility(View.VISIBLE);
+                        //textid.setVisibility(View.VISIBLE);
                         int ID = Integer.parseInt(textid.getText().toString());
                         Attendance temp = new Attendance();
                         temp.setStudentInCourse(attendance.get(ID).getStudentInCourse());
@@ -88,20 +99,45 @@ public class takeAttendanceFragment extends DialogFragment {
                         //firstName.setText(attendance.get(ID).toString());
                     } else {
                         toggle.setBackgroundColor(Color.GREEN);
-                        textid.setVisibility(View.VISIBLE);
+                        //textid.setVisibility(View.VISIBLE);
                         int ID = Integer.parseInt(textid.getText().toString());
                         Attendance temp = new Attendance();
                         temp.setStudentInCourse(attendance.get(ID).getStudentInCourse());
                         temp.setDate(attendance.get(ID).getDate());
                         temp.setPresent(1);
                         attendance.set(ID, temp);
-                        //firstName.setText(attendance.toString());
+                        firstName.setText(attendance.toString());
                     }
                 }
             });
 
         }
         return theView;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        listener = (TakeAttendanceListener)context;
+    }
+
+    private void saveButtonClicked(View v) {
+        System.out.println(" The array is : " + attendance.size());
+        for (int i = 0; i < attendance.size(); i++) {
+            System.out.println(attendance.get(i).toString());
+        }
+            listener.onTakeAttendance(this.attendance);
+
+        this.dismiss();
+    }
+
+    private String getDateTime() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat(
+                "yyyy-MM-dd", Locale.getDefault());
+        //SimpleDateFormat dateFormat = new SimpleDateFormat(
+        //        "yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        Date date = new Date();
+        return dateFormat.format(date);
     }
 
 }

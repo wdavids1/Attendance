@@ -37,13 +37,27 @@
         android:layout_gravity="center_horizontal"
         android:onClick="onAddStudentToCourseButtonClick" />
 
-    <Button
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Take Attendance"
-        android:id="@+id/takeAttendance"
-        android:layout_gravity="center_horizontal"
-        android:onClick="onTakeAttendanceButtonClick" />
+        android:gravity="center_horizontal">
+
+        <Spinner
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/coursespinner"
+            android:layout_gravity="center_horizontal"
+            android:minHeight="40dp" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Take Attendance"
+            android:id="@+id/takeAttendance"
+            android:layout_gravity="center_horizontal"
+            android:onClick="onTakeAttendanceButtonClick" />
+    </LinearLayout>
 
     <Button
         android:layout_width="wrap_content"
@@ -53,11 +67,4 @@
         android:layout_gravity="center_horizontal"
         android:onClick="onRebuildDBButtonClick" />
 
-    <fragment
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:name="edu.westga.attendance.StudentDisplayFragment"
-        android:id="@+id/studentDisplayFragment"
-        android:layout_gravity="center_horizontal"
-        tools:layout="@layout/student_fragment" />
 </LinearLayout>
