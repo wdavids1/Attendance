@@ -62,6 +62,22 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="Get Daily Attendance"
+        android:id="@+id/getAttendanceButton"
+        android:layout_gravity="center_horizontal"
+        android:onClick="onGetAttendanceButtonClick" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Get Attendance for Date Range"
+        android:id="@+id/getAttendanceRangeButton"
+        android:layout_gravity="center_horizontal"
+        android:onClick="onGetAttendanceRangeButtonClick" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="Rebuild DB"
         android:id="@+id/rebuilddb"
         android:layout_gravity="center_horizontal"

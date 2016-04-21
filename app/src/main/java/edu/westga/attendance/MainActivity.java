@@ -11,13 +11,19 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Spinner;
 import android.widget.Toast;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements StudentEditFragment.EditStudentListener, StudentDisplayFragment.StudentDisplayListener, CourseEditFragment.EditCourseListener, StudentInCourseEditFragment.EditStudentInCourseListener,
-takeAttendanceFragment.TakeAttendanceListener {
+takeAttendanceFragment.TakeAttendanceListener, selectCourseDateReportFragment.ViewResultListener, selectCourseDateRangeReportFragment.ViewResultListener {
 
     private Spinner course;
+    private Spinner courseReport;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,6 +119,26 @@ takeAttendanceFragment.TakeAttendanceListener {
             } else {
                 Toast.makeText(getApplicationContext(), "Attendance has already been taken or course has no students", Toast.LENGTH_LONG).show();
             }
+        } catch (Exception e) {
+            Toast.makeText(getApplicationContext(), "An error has occured: " + e.getMessage(), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public void onGetAttendanceButtonClick(View view) {
+        try {
+            FragmentManager fm = getFragmentManager();
+            selectCourseDateReportFragment attendanceFragment = new selectCourseDateReportFragment();
+            attendanceFragment.show(fm, "Get report");
+        } catch (Exception e) {
+            Toast.makeText(getApplicationContext(), "An error has occured: " + e.getMessage(), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public void onGetAttendanceRangeButtonClick(View view) {
+        try {
+            FragmentManager fm = getFragmentManager();
+            selectCourseDateRangeReportFragment attendanceFragment = new selectCourseDateRangeReportFragment();
+            attendanceFragment.show(fm, "Get report");
         } catch (Exception e) {
             Toast.makeText(getApplicationContext(), "An error has occured: " + e.getMessage(), Toast.LENGTH_LONG).show();
         }
@@ -218,5 +244,60 @@ takeAttendanceFragment.TakeAttendanceListener {
         course.setAdapter(courseAdapter);
 
         courseAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+    }
+
+    @Override
+    public void onViewCourseDateReport(Course course, String date) {
+        try {
+            FragmentManager fm = getFragmentManager();
+            dateCourseAttendanceReportFragment attendanceFragment = new dateCourseAttendanceReportFragment();
+            attendanceFragment.setCourse(course);
+            attendanceFragment.setDate(date);
+            attendanceFragment.show(fm, "Get report");
+        } catch (Exception e) {
+            Toast.makeText(getApplicationContext(), "An error has occured: " + e.getMessage(), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    public void onViewCourseDateRangeReport(Course course, String startdate, String enddate) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat(
+                "yyyy-MM-dd", Locale.getDefault());
+
+        Date sdate = null;
+        try {
+            sdate = dateFormat.parse(startdate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        Date edate = null;
+        try {
+            edate = dateFormat.parse(enddate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            if (sdate.after(edate)) {
+                Toast.makeText(getApplicationContext(), "Start date is after End date. ", Toast.LENGTH_LONG).show();
+                return;
+            }
+        } catch (Exception e) {
+            Toast.makeText(getApplicationContext(), "An error has occured: " + e.getMessage(), Toast.LENGTH_LONG).show();
+            return;
+        }
+
+
+        try {
+            FragmentManager fm = getFragmentManager();
+            dateRangeCourseAttendanceReportFragment attendanceFragment = new dateRangeCourseAttendanceReportFragment();
+            attendanceFragment.setCourse(course);
+            attendanceFragment.setStartDate(startdate);
+            attendanceFragment.setEndDate(enddate);
+            attendanceFragment.show(fm, "Get report");
+        } catch (Exception e) {
+            Toast.makeText(getApplicationContext(), "An error has occured: " + e.getMessage(), Toast.LENGTH_LONG).show();
+        }
     }
 }

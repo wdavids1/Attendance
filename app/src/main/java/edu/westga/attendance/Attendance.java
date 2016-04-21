@@ -10,6 +10,8 @@ public class Attendance {
     private StudentInCourse studentInCourse;
     private String date;
     private int present;
+    private int countDays;
+    private int countPresent;
 
     public Attendance() {
 
@@ -47,6 +49,14 @@ public class Attendance {
     public void setPresent(int present) { this.present = present; }
 
     public int getPresent() { return this.present; }
+
+    public void setCountDays(int countDays) { this.countDays = countDays; }
+
+    public int getCountDays() { return this.countDays; }
+
+    public void setCountPresent(int countPresent) { this.countPresent = countPresent; }
+
+    public int getCountPresent() { return this.countPresent; }
 
     @Override
     public String toString() {
