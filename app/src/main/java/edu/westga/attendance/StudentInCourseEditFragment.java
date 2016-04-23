@@ -1,19 +1,18 @@
 package edu.westga.attendance;
 
 import android.app.DialogFragment;
-import android.app.FragmentManager;
-import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Spinner;
 
 import java.util.List;
+
+import edu.westga.attendance.model.Course;
+import edu.westga.attendance.model.Student;
 
 
 /**
@@ -49,6 +48,14 @@ public class StudentInCourseEditFragment extends DialogFragment {
                 addButtonClicked(v);
             }
         });
+
+        final Button closeButton = (Button) theView.findViewById(R.id.closeButton);
+        closeButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                closeButtonClicked(v);
+            }
+        });
+
         return theView;
     }
 
@@ -71,8 +78,12 @@ public class StudentInCourseEditFragment extends DialogFragment {
 
     //public void setLastName(String lastName) { this.lastName.setText(lastName);}
 
+    private void closeButtonClicked(View v) {
+        this.dismiss();
+    }
+
     private void fillStudentSpinner() {
-        StudentSpinnerAdapter  studentAdapter;
+        StudentSpinnerAdapter studentAdapter;
         DBHandler dbHandler = new DBHandler(this.getActivity(), null, null, 1);
         List<Student> students = dbHandler.getAllStudents();
         studentAdapter = new StudentSpinnerAdapter(this.getActivity(),
@@ -83,7 +94,7 @@ public class StudentInCourseEditFragment extends DialogFragment {
     }
 
     private void fillCourseSpinner() {
-        CourseSpinnerAdapter  courseAdapter;
+        CourseSpinnerAdapter courseAdapter;
         DBHandler dbHandler = new DBHandler(this.getActivity(), null, null, 1);
         List<Course> courses = dbHandler.getAllCourses();
         courseAdapter = new CourseSpinnerAdapter(this.getActivity(),

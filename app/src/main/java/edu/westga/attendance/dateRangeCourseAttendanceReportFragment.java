@@ -2,7 +2,6 @@ package edu.westga.attendance;
 
 import android.app.DialogFragment;
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +15,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
+
+import edu.westga.attendance.DBHandler;
+import edu.westga.attendance.R;
+import edu.westga.attendance.model.Attendance;
+import edu.westga.attendance.model.Course;
 
 /**
  * Created by Wayne on 4/20/2016.
@@ -58,53 +62,47 @@ public class dateRangeCourseAttendanceReportFragment extends DialogFragment{
         attendance = dbHandler.getAttendanceForCourseDateRange(course, startDate, endDate);
 
         TextView courseName = (TextView) theView.findViewById(R.id.textViewCourse);
-        courseName.setText("Course" + formatDate(startDate));
+        TextView dates = (TextView) theView.findViewById(R.id.textViewDate);
 
-        for (int i=0; i<attendance.size(); i++) {
-            LayoutInflater inflater1 = (LayoutInflater) this.getActivity().getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View mLinearView = inflater1.inflate(R.layout.student_list_report_detail, null);
+        if (attendance.size() > 0) {
+            courseName.setText("Course: " + attendance.get(0).getStudentInCourse().getCourse().getCourseName());
+            dates.setText(formatDate(startDate) + " to " + formatDate(endDate));
 
-            final TextView firstName = (TextView) mLinearView.findViewById(R.id.textViewName);
-            final TextView present = (TextView) mLinearView.findViewById(R.id.textViewPresent);
+            for (int i=0; i<attendance.size(); i++) {
+                LayoutInflater inflater1 = (LayoutInflater) this.getActivity().getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                View mLinearView = inflater1.inflate(R.layout.student_list_report_detail, null);
 
-            int daysAbsent = attendance.get(i).getCountDays() - attendance.get(i).getCountPresent();
+                final TextView firstName = (TextView) mLinearView.findViewById(R.id.textViewName);
+                final TextView present = (TextView) mLinearView.findViewById(R.id.textViewPresent);
 
-            String attendanceHistory = attendance.get(i).getCountPresent()
-                    + "/" + daysAbsent
-                    + "/" + attendance.get(i).getCountPresent();
+                int daysAbsent = attendance.get(i).getCountDays() - attendance.get(i).getCountPresent();
 
-            final String name = "  " + attendance.get(i).getStudentInCourse().getStudent().getFirstName()
-                    + " " + attendance.get(i).getStudentInCourse().getStudent().getLastName();
+                String attendanceHistory = "(" + attendance.get(i).getCountPresent()
+                        + "/" + daysAbsent
+                        + "/" + attendance.get(i).getCountPresent() + ")";
+
+                final String name = "  " + attendance.get(i).getStudentInCourse().getStudent().getFirstName()
+                        + " " + attendance.get(i).getStudentInCourse().getStudent().getLastName();
 
 
-            present.setText(attendanceHistory);
-            firstName.setText(name);
+                present.setText(attendanceHistory);
+                firstName.setText(name);
 
-            mLinearListView.addView(mLinearView);
-
+                mLinearListView.addView(mLinearView);
+            }
+        } else {
+            courseName.setText("No data found for " + formatDate(startDate) + " to " + formatDate(endDate));
+        }
             final Button closeButton = (Button) theView.findViewById(R.id.closeButton);
             closeButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     closeButtonClicked(v);
                 }
             });
-        }
         return theView;
     }
 
-    //@Override
-    //public void onAttach(Context context) {
-    //    super.onAttach(context);
-    //    listener = (TakeAttendanceListener)context;
-    //}
-
     private void closeButtonClicked(View v) {
-    //    System.out.println(" The array is : " + attendance.size());
-    //    for (int i = 0; i < attendance.size(); i++) {
-    //        System.out.println(attendance.get(i).toString());
-    //    }
-    //    listener.onTakeAttendance(this.attendance);
-
         this.dismiss();
     }
 

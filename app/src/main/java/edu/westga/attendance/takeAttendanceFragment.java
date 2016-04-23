@@ -12,12 +12,13 @@ import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.ToggleButton;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import edu.westga.attendance.model.Attendance;
+import edu.westga.attendance.model.StudentInCourse;
 
 /**
  * Created by Wayne on 4/15/2016.
@@ -54,13 +55,12 @@ public class takeAttendanceFragment extends DialogFragment {
         List<StudentInCourse> students = dbHandler.getAllStudentsInCourse(courseid);
 
         TextView courseName = (TextView) theView.findViewById(R.id.textViewCourse);
-        courseName.setText("Course");
+        courseName.setText(students.get(0).getCourse().getCourseName());
 
         for (int i=0; i<students.size(); i++) {
             Attendance newAttendance = new Attendance(students.get(i), getDateTime(), 1);
             attendance.add(newAttendance);
 
-            // inflater1 = null;
             LayoutInflater inflater1 = (LayoutInflater) this.getActivity().getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View mLinearView = inflater1.inflate(R.layout.student_list_detail, null);
 
@@ -70,10 +70,8 @@ public class takeAttendanceFragment extends DialogFragment {
             toggle.setBackgroundColor(Color.GREEN);
 
             final String name = "  " + students.get(i).getStudent().getFirstName() + " " + students.get(i).getStudent().getLastName();
-            //final int id = students.get(i).getId();
 
             firstName.setText(name);
-            //textid.setText(Integer.toString(id));
             textid.setText(Integer.toString(i));
 
             mLinearListView.addView(mLinearView);
@@ -85,34 +83,41 @@ public class takeAttendanceFragment extends DialogFragment {
                 }
             });
 
+            final Button closeButton = (Button) theView.findViewById(R.id.closeButton);
+            closeButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    closeButtonClicked(v);
+                }
+            });
+
             toggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     if (isChecked) {
                         toggle.setBackgroundColor(Color.RED);
-                        //textid.setVisibility(View.VISIBLE);
                         int ID = Integer.parseInt(textid.getText().toString());
                         Attendance temp = new Attendance();
                         temp.setStudentInCourse(attendance.get(ID).getStudentInCourse());
                         temp.setDate(attendance.get(ID).getDate());
                         temp.setPresent(0);
                         attendance.set(ID, temp);
-                        //firstName.setText(attendance.get(ID).toString());
                     } else {
                         toggle.setBackgroundColor(Color.GREEN);
-                        //textid.setVisibility(View.VISIBLE);
                         int ID = Integer.parseInt(textid.getText().toString());
                         Attendance temp = new Attendance();
                         temp.setStudentInCourse(attendance.get(ID).getStudentInCourse());
                         temp.setDate(attendance.get(ID).getDate());
                         temp.setPresent(1);
                         attendance.set(ID, temp);
-                        firstName.setText(attendance.toString());
                     }
                 }
             });
 
         }
         return theView;
+    }
+
+    private void closeButtonClicked(View v) {
+        this.dismiss();
     }
 
     @Override
@@ -134,8 +139,6 @@ public class takeAttendanceFragment extends DialogFragment {
     private String getDateTime() {
         SimpleDateFormat dateFormat = new SimpleDateFormat(
                 "yyyy-MM-dd", Locale.getDefault());
-        //SimpleDateFormat dateFormat = new SimpleDateFormat(
-        //        "yyyy-MM-dd HH:mm:ss", Locale.getDefault());
         Date date = new Date();
         return dateFormat.format(date);
     }

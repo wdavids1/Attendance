@@ -9,18 +9,18 @@
         android:textColor="@color/colorPrimary"
         android:textStyle="bold"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Select a Date Range and Course for an Attendance Report"
+        android:text="Select a Date and Student for an Attendance Report"
         android:id="@+id/textView"
         android:layout_gravity="center_horizontal"
         android:textAlignment="center"
-        android:padding="10dp" />
+        android:padding="10dp"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/colorPrimary"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Start Date"
+        android:text="Report Date"
         android:id="@+id/textViewStartDate"
         android:layout_gravity="center_horizontal"
         android:textAlignment="center"
@@ -30,7 +30,7 @@
         android:layout_width="wrap_content"
         android:layout_height="150dp"
         android:scaleY="1"
-        android:id="@+id/startDate"
+        android:id="@+id/datePicker"
         android:layout_gravity="center_horizontal"
         android:spinnersShown="true"
         android:datePickerMode="spinner"
@@ -39,41 +39,14 @@
         android:layout_marginTop="-30dp"
         android:layout_marginRight="-50dp"
         android:layout_marginBottom="-30dp"
-        android:padding="5dp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/colorPrimary"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="End Date"
-        android:id="@+id/textViewEndDate"
-        android:layout_gravity="center_horizontal"
-        android:textAlignment="center"
-        android:padding="10dp"/>
-
-    <DatePicker
-        android:layout_width="wrap_content"
-        android:layout_height="150dp"
-        android:scaleY="1"
-        android:id="@+id/endDate"
-        android:layout_gravity="center_horizontal"
-        android:spinnersShown="true"
-        android:datePickerMode="spinner"
-        android:calendarViewShown="false"
-        android:layout_marginLeft="-50dp"
-        android:layout_marginTop="-30dp"
-        android:layout_marginRight="-50dp"
-        android:layout_marginBottom="-30dp"
-        android:padding="10dp" />
+        android:padding="5dp"/>
 
     <Spinner
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:background="@drawable/spinner"
-        android:id="@+id/coursespinner"
-        android:layout_gravity="center_horizontal"
-        android:padding="10dp"/>
+        android:id="@+id/studentspinner"
+        android:layout_gravity="center_horizontal" />
 
     <Button
         android:layout_width="300dp"
@@ -81,7 +54,8 @@
         android:text="View Report"
         android:id="@+id/viewReportButton"
         style="@style/button"
-        android:layout_gravity="center_horizontal" />
+        android:layout_gravity="center_horizontal"
+        android:padding="10dp"/>
 
     <Button
         android:layout_width="300dp"

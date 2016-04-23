@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import edu.westga.attendance.R;
+
 /**
  * Created by Wayne on 4/9/2016.
  *
@@ -37,7 +39,18 @@ public class CourseEditFragment extends DialogFragment {
                 addButtonClicked(v);
             }
         });
+
+        final Button closeButton = (Button) theView.findViewById(R.id.closeButton);
+        closeButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                closeButtonClicked(v);
+            }
+        });
         return theView;
+    }
+
+    private void closeButtonClicked(View v) {
+        this.dismiss();
     }
 
     private void addButtonClicked(View v) {

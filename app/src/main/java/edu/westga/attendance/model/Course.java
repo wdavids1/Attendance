@@ -1,4 +1,4 @@
-package edu.westga.attendance;
+package edu.westga.attendance.model;
 
 /**
  * Created by Wayne on 4/9/2016.

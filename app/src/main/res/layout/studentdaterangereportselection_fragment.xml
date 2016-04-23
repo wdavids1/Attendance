@@ -9,7 +9,7 @@
         android:textColor="@color/colorPrimary"
         android:textStyle="bold"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Select a Date Range and Course for an Attendance Report"
+        android:text="Select a Date Range and Student for an Attendance Report"
         android:id="@+id/textView"
         android:layout_gravity="center_horizontal"
         android:textAlignment="center"
@@ -65,13 +65,13 @@
         android:layout_marginTop="-30dp"
         android:layout_marginRight="-50dp"
         android:layout_marginBottom="-30dp"
-        android:padding="10dp" />
+        android:padding="5dp" />
 
     <Spinner
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:background="@drawable/spinner"
-        android:id="@+id/coursespinner"
+        android:id="@+id/studentspinner"
         android:layout_gravity="center_horizontal"
         android:padding="10dp"/>
 

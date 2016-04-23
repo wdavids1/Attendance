@@ -2,7 +2,6 @@ package edu.westga.attendance;
 
 import android.app.DialogFragment;
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,30 +19,35 @@ import java.util.Locale;
 import edu.westga.attendance.DBHandler;
 import edu.westga.attendance.R;
 import edu.westga.attendance.model.Attendance;
-import edu.westga.attendance.model.Course;
+import edu.westga.attendance.model.Student;
 
 /**
  * Created by Wayne on 4/20/2016.
  *
- * An attendance report for the selected date and course
+ * An attendance report for the selected date and student
  */
-public class dateCourseAttendanceReportFragment extends DialogFragment{
+public class dateRangeStudentAttendanceReportFragment extends DialogFragment{
 
     private LinearLayout mLinearListView;
-    private Course course;
-    private String theDate;
+    private Student student;
+    private String startDate;
+    private String endDate;
     private ArrayList<Attendance> attendance = new ArrayList<>();
 
-    public dateCourseAttendanceReportFragment() {
+    public dateRangeStudentAttendanceReportFragment() {
 
     }
 
-    public void setCourse(Course course) {
-        this.course = course;
+    public void setStudent(Student student) {
+        this.student = student;
     }
 
-    public void setDate(String theDate) {
-        this.theDate = theDate;
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
+    }
+
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
     }
 
     @Override
@@ -51,43 +55,41 @@ public class dateCourseAttendanceReportFragment extends DialogFragment{
                              Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment
-        View theView = inflater.inflate(R.layout.datecourseattendancereport_fragment, container, false);
+        View theView = inflater.inflate(R.layout.datestudentattendancereport_fragment, container, false);
         mLinearListView = (LinearLayout) theView.findViewById(R.id.linear_listview);
 
         DBHandler dbHandler = new DBHandler(this.getActivity(), null, null, 1);
-        attendance = dbHandler.getAttendanceForCourseDate(course, theDate);
+        attendance = dbHandler.getAttendanceForStudentDateRange(student, startDate, endDate);
 
-        TextView courseName = (TextView) theView.findViewById(R.id.textViewCourse);
+        TextView nameText = (TextView) theView.findViewById(R.id.textViewStudent);
         TextView dates = (TextView) theView.findViewById(R.id.textViewDate);
 
         if (attendance.size() > 0) {
-            courseName.setText("Course: " + attendance.get(0).getStudentInCourse().getCourse().getCourseName());
-            dates.setText(formatDate(theDate));
+            nameText.setText("Student: " + attendance.get(0).getStudentInCourse().getStudent().getFirstName() + " " + attendance.get(0).getStudentInCourse().getStudent().getLastName());
+            dates.setText(formatDate(startDate) + " to " + formatDate(endDate));
 
-            for (int i=0; i<attendance.size(); i++) {
+            for (int i = 0; i < attendance.size(); i++) {
                 LayoutInflater inflater1 = (LayoutInflater) this.getActivity().getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                View mLinearView = inflater1.inflate(R.layout.student_list_report_detail, null);
+                View mLinearView = inflater1.inflate(R.layout.course_list_report_detail, null);
 
-                final TextView firstName = (TextView) mLinearView.findViewById(R.id.textViewName);
+                final TextView courseName = (TextView) mLinearView.findViewById(R.id.textViewName);
                 final TextView present = (TextView) mLinearView.findViewById(R.id.textViewPresent);
 
-                final String name = "  " + attendance.get(i).getStudentInCourse().getStudent().getFirstName()
-                        + " " + attendance.get(i).getStudentInCourse().getStudent().getLastName();
+                int daysAbsent = attendance.get(i).getCountDays() - attendance.get(i).getCountPresent();
 
-                firstName.setText(name);
+                String attendanceHistory = "(" + attendance.get(i).getCountPresent()
+                        + "/" + daysAbsent
+                        + "/" + attendance.get(i).getCountPresent() + ")";
 
-                if (attendance.get(i).getPresent() == 1) {
-                    present.setText("Present");
-                    present.setBackgroundColor(Color.GREEN);
-                } else {
-                    present.setText("Absent");
-                    present.setBackgroundColor(Color.RED);
-                }
+                final String name = "  " + attendance.get(i).getStudentInCourse().getCourse().getCourseName();
+
+                present.setText(attendanceHistory);
+                courseName.setText(name);
 
                 mLinearListView.addView(mLinearView);
             }
         } else {
-            courseName.setText("No data found for " + formatDate(theDate));
+            nameText.setText("No data found for " + formatDate(startDate) + " to " + formatDate(endDate));
         }
         final Button closeButton = (Button) theView.findViewById(R.id.closeButton);
         closeButton.setOnClickListener(new View.OnClickListener() {

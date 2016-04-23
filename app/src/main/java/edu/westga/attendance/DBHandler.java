@@ -12,6 +12,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import edu.westga.attendance.model.Attendance;
+import edu.westga.attendance.model.Course;
+import edu.westga.attendance.model.Student;
+import edu.westga.attendance.model.StudentInCourse;
+
 /**
  * Created by Wayne on 4/9/2016.
  *
@@ -257,7 +262,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
     public ArrayList<Attendance> getAttendanceForCourseDate(Course course, String date) {
         String query = "Select attendance.id, attendance.present, attendance.classdate, studentincourse.id, "
-                + " student.studentid, student.firstname, student.lastname FROM " + TABLE_ATTENDANCE
+                + " student.studentid, student.firstname, student.lastname, course.coursename FROM " + TABLE_ATTENDANCE
                 + " LEFT JOIN studentincourse ON attendance.studentcourseid = studentincourse.id"
                 + " JOIN student ON studentincourse.studentid = student.studentid"
                 + " JOIN course ON studentincourse.courseid = course.courseid"
@@ -288,6 +293,63 @@ public class DBHandler extends SQLiteOpenHelper {
 
                     studentInCourse.setStudent(student);
 
+                    Course newCourse = new Course();
+                    newCourse.setCourseName(cursor.getString(7));
+
+                    studentInCourse.setCourse(newCourse);
+
+                    attendance.setStudentInCourse(studentInCourse);
+
+                    attendances.add(attendance);
+                } while (cursor.moveToNext());
+
+            }
+            cursor.close();
+        }
+
+        db.close();
+        return attendances;
+    }
+
+    public ArrayList<Attendance> getAttendanceForStudentDate(Student student, String date) {
+        String query = "Select attendance.id, attendance.present, attendance.classdate, studentincourse.id, "
+                + " student.studentid, student.firstname, student.lastname, course.coursename, course.courseid FROM " + TABLE_ATTENDANCE
+                + " LEFT JOIN studentincourse ON attendance.studentcourseid = studentincourse.id"
+                + " JOIN student ON studentincourse.studentid = student.studentid"
+                + " JOIN course ON studentincourse.courseid = course.courseid"
+                + " WHERE studentincourse.studentid =  \"" + student.getStudentID() + "\""
+                + " AND attendance.classdate =  \"" + date + "\"";
+
+        ArrayList<Attendance> attendances = new ArrayList<>();
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                do {
+                    Attendance attendance = new Attendance();
+                    attendance.setId(Integer.parseInt(cursor.getString(0)));
+                    attendance.setPresent(Integer.parseInt(cursor.getString(1)));
+                    attendance.setDate(cursor.getString(2));
+
+                    StudentInCourse studentInCourse = new StudentInCourse();
+                    studentInCourse.setID(Integer.parseInt(cursor.getString(3)));
+
+                    Student newStudent = new Student();
+                    newStudent.setStudentID(Integer.parseInt(cursor.getString(4)));
+                    newStudent.setFirstName(cursor.getString(5));
+                    newStudent.setLastName(cursor.getString(6));
+
+                    studentInCourse.setStudent(newStudent);
+
+                    Course newCourse = new Course();
+                    newCourse.setCourseID(Integer.parseInt(cursor.getString(8)));
+                    newCourse.setCourseName(cursor.getString(7));
+
+                    studentInCourse.setCourse(newCourse);
+
                     attendance.setStudentInCourse(studentInCourse);
 
                     attendances.add(attendance);
@@ -304,7 +366,7 @@ public class DBHandler extends SQLiteOpenHelper {
     public ArrayList<Attendance> getAttendanceForCourseDateRange(Course course, String startDate, String endDate) {
         String query = "Select attendance.id, attendance.present, attendance.classdate, studentincourse.id, "
                 + " student.studentid, student.firstname, student.lastname, Count(attendance.present) AS countDays, "
-                + " SUM(attendance.present) AS countPresent FROM " + TABLE_ATTENDANCE
+                + " SUM(attendance.present) AS countPresent, course.coursename FROM " + TABLE_ATTENDANCE
                 + " LEFT JOIN studentincourse ON attendance.studentcourseid = studentincourse.id"
                 + " JOIN student ON studentincourse.studentid = student.studentid"
                 + " JOIN course ON studentincourse.courseid = course.courseid"
@@ -337,6 +399,67 @@ public class DBHandler extends SQLiteOpenHelper {
                     student.setLastName(cursor.getString(6));
 
                     studentInCourse.setStudent(student);
+
+                    Course newCourse = new Course();
+                    newCourse.setCourseName(cursor.getString(9));
+
+                    studentInCourse.setCourse(newCourse);
+
+                    attendance.setStudentInCourse(studentInCourse);
+
+                    attendances.add(attendance);
+                } while (cursor.moveToNext());
+
+            }
+            cursor.close();
+        }
+
+        db.close();
+        return attendances;
+    }
+
+    public ArrayList<Attendance> getAttendanceForStudentDateRange(Student student, String startDate, String endDate) {
+        String query = "Select attendance.id, attendance.present, attendance.classdate, studentincourse.id, "
+                + " student.studentid, student.firstname, student.lastname, Count(attendance.present) AS countDays, "
+                + " SUM(attendance.present) AS countPresent, course.coursename, course.courseid FROM " + TABLE_ATTENDANCE
+                + " LEFT JOIN studentincourse ON attendance.studentcourseid = studentincourse.id"
+                + " JOIN student ON studentincourse.studentid = student.studentid"
+                + " JOIN course ON studentincourse.courseid = course.courseid"
+                + " WHERE studentincourse.studentid =  \"" + student.getStudentID() + "\""
+                + " AND attendance.classdate BETWEEN  \"" + startDate + "\" AND \"" + endDate + "\""
+                + " GROUP BY course.courseid";
+
+        ArrayList<Attendance> attendances = new ArrayList<>();
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                do {
+                    Attendance attendance = new Attendance();
+                    attendance.setId(Integer.parseInt(cursor.getString(0)));
+                    attendance.setPresent(Integer.parseInt(cursor.getString(1)));
+                    attendance.setDate(cursor.getString(2));
+                    attendance.setCountDays(Integer.parseInt(cursor.getString(7)));
+                    attendance.setCountPresent(Integer.parseInt(cursor.getString(8)));
+
+                    StudentInCourse studentInCourse = new StudentInCourse();
+                    studentInCourse.setID(Integer.parseInt(cursor.getString(3)));
+
+                    Student newStudent = new Student();
+                    newStudent.setStudentID(Integer.parseInt(cursor.getString(4)));
+                    newStudent.setFirstName(cursor.getString(5));
+                    newStudent.setLastName(cursor.getString(6));
+
+                    studentInCourse.setStudent(newStudent);
+
+                    Course newCourse = new Course();
+                    newCourse.setCourseID(Integer.parseInt(cursor.getString(10)));
+                    newCourse.setCourseName(cursor.getString(9));
+
+                    studentInCourse.setCourse(newCourse);
 
                     attendance.setStudentInCourse(studentInCourse);
 
@@ -451,9 +574,10 @@ public class DBHandler extends SQLiteOpenHelper {
     public List<StudentInCourse> getAllStudentsInCourse(int courseID) {
         List<StudentInCourse> students = new ArrayList<>();
 
-        String query = "Select id, student.studentid, firstname, lastname "
+        String query = "Select id, student.studentid, firstname, lastname, coursename "
             + "FROM student JOIN studentincourse ON student.studentid = studentincourse.studentid "
-            + "WHERE courseid" + " = " + courseID;
+                + "JOIN course ON studentincourse.courseid = course.courseid "
+            + "WHERE studentincourse.courseid" + " = " + courseID;
 
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -471,6 +595,11 @@ public class DBHandler extends SQLiteOpenHelper {
                     student.setLastName(cursor.getString(3));
 
                     studentInCourse.setStudent(student);
+
+                    Course course = new Course();
+                    course.setCourseName(cursor.getString(4));
+
+                    studentInCourse.setCourse(course);
 
                     students.add(studentInCourse);
                 } while (cursor.moveToNext());
@@ -518,6 +647,90 @@ public class DBHandler extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_STUDENTINCOURSE);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_ATTENDANCE);
         onCreate(db);
+
+        Student wayne = new Student(1, "Wayne", "Davidson");
+        addStudent(wayne);
+        Student jill = new Student(2, "Jill", "Smith");
+        addStudent(jill);
+        Student bob = new Student(3, "Bob", "Trainor");
+        addStudent(bob);
+        Student fred = new Student(4, "Fred", "Flintstone");
+        addStudent(fred);
+        Student angie = new Student(5, "Angie", "Zamora");
+        addStudent(angie);
+
+        Course cs101 = new Course(1, "CS101");
+        addCourse(cs101);
+        Course cs102 = new Course(2, "CS102");
+        addCourse(cs102);
+        Course cs103 = new Course(3, "CS103");
+        addCourse(cs103);
+
+        StudentInCourse waynecs101 = new StudentInCourse(1, wayne, cs101);
+        addStudentInCourse(waynecs101);
+        StudentInCourse jillcs101 = new StudentInCourse(2, jill, cs101);
+        addStudentInCourse(jillcs101);
+        StudentInCourse bobcs101 = new StudentInCourse(3, bob, cs101);
+        addStudentInCourse(bobcs101);
+        StudentInCourse fredcs101 = new StudentInCourse(4, fred, cs101);
+        addStudentInCourse(fredcs101);
+        StudentInCourse angiecs101 = new StudentInCourse(5, angie, cs101);
+        addStudentInCourse(angiecs101);
+
+        StudentInCourse waynecs102 = new StudentInCourse(6, wayne, cs102);
+        addStudentInCourse(waynecs102);
+        StudentInCourse fredcs102 = new StudentInCourse(7, fred, cs102);
+        addStudentInCourse(fredcs102);
+
+        Attendance cs101042016wayne = new Attendance(waynecs101, "2016-04-20", 1);
+        addAttendance(cs101042016wayne);
+        Attendance cs101042016jill = new Attendance(jillcs101, "2016-04-20", 1);
+        addAttendance(cs101042016jill);
+        Attendance cs101042016bob = new Attendance(bobcs101, "2016-04-20", 0);
+        addAttendance(cs101042016bob);
+        Attendance cs101042016fred = new Attendance(fredcs101, "2016-04-20", 1);
+        addAttendance(cs101042016fred);
+        Attendance cs101042016angie = new Attendance(angiecs101, "2016-04-20", 0);
+        addAttendance(cs101042016angie);
+
+        Attendance cs101042116wayne = new Attendance(waynecs101, "2016-04-21", 0);
+        addAttendance(cs101042116wayne);
+        Attendance cs101042116jill = new Attendance(jillcs101, "2016-04-21", 1);
+        addAttendance(cs101042116jill);
+        Attendance cs101042116bob = new Attendance(bobcs101, "2016-04-21", 0);
+        addAttendance(cs101042116bob);
+        Attendance cs101042116fred = new Attendance(fredcs101, "2016-04-21", 1);
+        addAttendance(cs101042116fred);
+        Attendance cs101042116angie = new Attendance(angiecs101, "2016-04-21", 1);
+        addAttendance(cs101042116angie);
+
+        Attendance cs101042216wayne = new Attendance(waynecs101, "2016-04-22", 0);
+        addAttendance(cs101042216wayne);
+        Attendance cs101042216jill = new Attendance(jillcs101, "2016-04-22", 1);
+        addAttendance(cs101042216jill);
+        Attendance cs101042216bob = new Attendance(bobcs101, "2016-04-22", 0);
+        addAttendance(cs101042216bob);
+        Attendance cs101042216fred = new Attendance(fredcs101, "2016-04-22", 1);
+        addAttendance(cs101042216fred);
+        Attendance cs101042216angie = new Attendance(angiecs101, "2016-04-22", 1);
+        addAttendance(cs101042216angie);
+
+        Attendance cs102042016wayne = new Attendance(waynecs102, "2016-04-20", 1);
+        addAttendance(cs102042016wayne);
+        Attendance cs102042016fred = new Attendance(fredcs102, "2016-04-20", 1);
+        addAttendance(cs102042016fred);
+
+        Attendance cs102042116wayne = new Attendance(waynecs102, "2016-04-21", 0);
+        addAttendance(cs102042116wayne);
+        Attendance cs102042116fred = new Attendance(fredcs102, "2016-04-21", 1);
+        addAttendance(cs102042116fred);
+
+        Attendance cs102042216wayne = new Attendance(waynecs102, "2016-04-22", 0);
+        addAttendance(cs102042216wayne);
+        Attendance cs102042216fred = new Attendance(fredcs102, "2016-04-22", 1);
+        addAttendance(cs102042216fred);
+
+
     }
 
     private String getDateTime() {

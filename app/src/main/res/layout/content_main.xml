@@ -14,27 +14,30 @@
     tools:showIn="@layout/activity_main">
 
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:text="Add Student"
         android:id="@+id/addStudentButton"
         android:layout_gravity="center_horizontal"
+        style="@style/button"
         android:onClick="onAddStudentButtonClick" />
 
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:text="Add Course"
         android:id="@+id/addCourseButton"
         android:layout_gravity="center_horizontal"
+        style="@style/button"
         android:onClick="onAddCourseButtonClick" />
 
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:text="Add Student to Course"
         android:id="@+id/addStudentToCourseButton"
         android:layout_gravity="center_horizontal"
+        style="@style/button"
         android:onClick="onAddStudentToCourseButtonClick" />
 
     <LinearLayout
@@ -44,43 +47,66 @@
         android:gravity="center_horizontal">
 
         <Spinner
-            android:layout_width="wrap_content"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:id="@+id/coursespinner"
             android:layout_gravity="center_horizontal"
+            android:background="@drawable/spinner"
             android:minHeight="40dp" />
 
         <Button
-            android:layout_width="wrap_content"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:text="Take Attendance"
             android:id="@+id/takeAttendance"
             android:layout_gravity="center_horizontal"
+            style="@style/button"
             android:onClick="onTakeAttendanceButtonClick" />
     </LinearLayout>
 
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:text="Get Daily Attendance"
         android:id="@+id/getAttendanceButton"
         android:layout_gravity="center_horizontal"
+        style="@style/button"
         android:onClick="onGetAttendanceButtonClick" />
 
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:text="Get Attendance for Date Range"
         android:id="@+id/getAttendanceRangeButton"
         android:layout_gravity="center_horizontal"
+        style="@style/button"
         android:onClick="onGetAttendanceRangeButtonClick" />
 
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:text="Get Student Daily Attendance"
+        android:id="@+id/getStudentAttendanceButton"
+        android:layout_gravity="center_horizontal"
+        style="@style/button"
+        android:onClick="onGetStudentAttendanceButtonClick" />
+
+    <Button
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:text="Get Student Attendance for Date Range"
+        android:id="@+id/getStudentAttendanceRangeButton"
+        android:layout_gravity="center_horizontal"
+        style="@style/button"
+        android:onClick="onGetStudentAttendanceRangeButtonClick" />
+
+    <Button
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:text="Rebuild DB"
         android:id="@+id/rebuilddb"
         android:layout_gravity="center_horizontal"
+        style="@style/button"
         android:onClick="onRebuildDBButtonClick" />
 
 </LinearLayout>

@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import edu.westga.attendance.model.Course;
+
 
 /**
  * Created by Wayne on 4/11/2016.
@@ -50,9 +52,9 @@ public class CourseSpinnerAdapter extends ArrayAdapter<Course> {
         TextView label = new TextView(mContext);
         label.setTextColor(Color.BLACK);
         label.setTextSize(18);
-        label.setText(" " + mValues.get(position).getCourseName());
-        label.setHeight(100);
-        label.setGravity(Gravity.LEFT | Gravity.CENTER );
+        label.setText("Course: " + mValues.get(position).getCourseName());
+        label.setHeight(120);
+        label.setGravity(Gravity.CENTER );
         return label;
     }
 
@@ -63,10 +65,11 @@ public class CourseSpinnerAdapter extends ArrayAdapter<Course> {
         // beneath it
         TextView label = new TextView(mContext);
         label.setTextColor(Color.BLACK);
+        label.setBackgroundColor(Color.parseColor("#CCFFFF"));
         label.setTextSize(18);
-        label.setText(" " + mValues.get(position).getCourseName());
+        label.setText(mValues.get(position).getCourseName());
         label.setHeight(70);
-        label.setGravity(Gravity.LEFT | Gravity.CENTER );
+        label.setGravity(Gravity.CENTER );
 
         return label;
     }

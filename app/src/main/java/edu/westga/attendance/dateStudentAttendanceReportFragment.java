@@ -20,26 +20,26 @@ import java.util.Locale;
 import edu.westga.attendance.DBHandler;
 import edu.westga.attendance.R;
 import edu.westga.attendance.model.Attendance;
-import edu.westga.attendance.model.Course;
+import edu.westga.attendance.model.Student;
 
 /**
  * Created by Wayne on 4/20/2016.
  *
  * An attendance report for the selected date and course
  */
-public class dateCourseAttendanceReportFragment extends DialogFragment{
+public class dateStudentAttendanceReportFragment extends DialogFragment{
 
     private LinearLayout mLinearListView;
-    private Course course;
+    private Student student;
     private String theDate;
     private ArrayList<Attendance> attendance = new ArrayList<>();
 
-    public dateCourseAttendanceReportFragment() {
+    public dateStudentAttendanceReportFragment() {
 
     }
 
-    public void setCourse(Course course) {
-        this.course = course;
+    public void setStudent(Student student) {
+        this.student = student;
     }
 
     public void setDate(String theDate) {
@@ -51,30 +51,30 @@ public class dateCourseAttendanceReportFragment extends DialogFragment{
                              Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment
-        View theView = inflater.inflate(R.layout.datecourseattendancereport_fragment, container, false);
+        View theView = inflater.inflate(R.layout.datestudentattendancereport_fragment, container, false);
         mLinearListView = (LinearLayout) theView.findViewById(R.id.linear_listview);
 
         DBHandler dbHandler = new DBHandler(this.getActivity(), null, null, 1);
-        attendance = dbHandler.getAttendanceForCourseDate(course, theDate);
+        attendance = dbHandler.getAttendanceForStudentDate(student, theDate);
 
-        TextView courseName = (TextView) theView.findViewById(R.id.textViewCourse);
+        TextView studentName = (TextView) theView.findViewById(R.id.textViewStudent);
         TextView dates = (TextView) theView.findViewById(R.id.textViewDate);
 
         if (attendance.size() > 0) {
-            courseName.setText("Course: " + attendance.get(0).getStudentInCourse().getCourse().getCourseName());
+
+            studentName.setText("Student: " + attendance.get(0).getStudentInCourse().getStudent().getFirstName() + " " + attendance.get(0).getStudentInCourse().getStudent().getLastName());
             dates.setText(formatDate(theDate));
 
             for (int i=0; i<attendance.size(); i++) {
                 LayoutInflater inflater1 = (LayoutInflater) this.getActivity().getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                View mLinearView = inflater1.inflate(R.layout.student_list_report_detail, null);
+                View mLinearView = inflater1.inflate(R.layout.course_list_report_detail, null);
 
-                final TextView firstName = (TextView) mLinearView.findViewById(R.id.textViewName);
+                final TextView courseName = (TextView) mLinearView.findViewById(R.id.textViewName);
                 final TextView present = (TextView) mLinearView.findViewById(R.id.textViewPresent);
 
-                final String name = "  " + attendance.get(i).getStudentInCourse().getStudent().getFirstName()
-                        + " " + attendance.get(i).getStudentInCourse().getStudent().getLastName();
+                final String name = "  " + attendance.get(i).getStudentInCourse().getCourse().getCourseName();
 
-                firstName.setText(name);
+                courseName.setText(name);
 
                 if (attendance.get(i).getPresent() == 1) {
                     present.setText("Present");
@@ -85,16 +85,18 @@ public class dateCourseAttendanceReportFragment extends DialogFragment{
                 }
 
                 mLinearListView.addView(mLinearView);
+
+
             }
         } else {
-            courseName.setText("No data found for " + formatDate(theDate));
+            studentName.setText("No data found for " + formatDate(theDate));
         }
         final Button closeButton = (Button) theView.findViewById(R.id.closeButton);
         closeButton.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    closeButtonClicked(v);
-                }
-            });
+            public void onClick(View v) {
+                closeButtonClicked(v);
+            }
+        });
         return theView;
     }
 

@@ -1,4 +1,7 @@
-package edu.westga.attendance;
+package edu.westga.attendance.model;
+
+import edu.westga.attendance.model.Course;
+import edu.westga.attendance.model.Student;
 
 /**
  * Created by Wayne on 4/9/2016.

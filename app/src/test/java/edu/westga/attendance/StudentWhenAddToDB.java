@@ -2,10 +2,14 @@ package edu.westga.attendance;
 
 import org.junit.Test;
 
+import edu.westga.attendance.model.Student;
+
 import static org.junit.Assert.assertEquals;
 
 /**
  * Created by Wayne on 4/9/2016.
+ *
+ * Test class for adding student
  */
 public class StudentWhenAddToDB {
     @Test

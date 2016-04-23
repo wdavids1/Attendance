@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import edu.westga.attendance.model.Student;
+
 
 /**
  * Created by Wayne on 4/11/2016.
@@ -50,9 +52,9 @@ public class StudentSpinnerAdapter extends ArrayAdapter<Student> {
         TextView label = new TextView(mContext);
         label.setTextColor(Color.BLACK);
         label.setTextSize(18);
-        label.setText(" " + mValues.get(position).getFirstName() + " " + mValues.get(position).getLastName());
-        label.setHeight(100);
-        label.setGravity(Gravity.LEFT | Gravity.CENTER );
+        label.setText("Student: " + mValues.get(position).getFirstName() + " " + mValues.get(position).getLastName());
+        label.setHeight(120);
+        label.setGravity(Gravity.CENTER );
         return label;
     }
 
@@ -63,10 +65,11 @@ public class StudentSpinnerAdapter extends ArrayAdapter<Student> {
         // beneath it
         TextView label = new TextView(mContext);
         label.setTextColor(Color.BLACK);
+        label.setBackgroundColor(Color.parseColor("#CCFFFF"));
         label.setTextSize(18);
-        label.setText(" " + mValues.get(position).getFirstName() + " " + mValues.get(position).getLastName());
+        label.setText(mValues.get(position).getFirstName() + " " + mValues.get(position).getLastName());
         label.setHeight(70);
-        label.setGravity(Gravity.LEFT | Gravity.CENTER );
+        label.setGravity(Gravity.CENTER );
 
         return label;
     }

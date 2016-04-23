@@ -5,10 +5,13 @@
     android:padding="20dp">
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/colorPrimary"
+        android:textStyle="bold"
         android:text="Add a Student to a Course"
+        android:textAlignment="center"
         android:id="@+id/textView"
         android:layout_gravity="center_horizontal"
         android:width="200dp" />
@@ -16,12 +19,14 @@
     <Spinner
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/spinner"
         android:id="@+id/studentspinner"
         android:layout_gravity="center_horizontal" />
 
     <Spinner
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/spinner"
         android:id="@+id/coursespinner"
         android:layout_gravity="center_horizontal"
         android:minHeight="40dp" />
@@ -31,5 +36,14 @@
         android:layout_height="wrap_content"
         android:text="Add"
         android:id="@+id/addButton"
+        style="@style/button"
+        android:layout_gravity="center_horizontal" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Close"
+        android:id="@+id/closeButton"
+        style="@style/button"
         android:layout_gravity="center_horizontal" />
 </LinearLayout>
