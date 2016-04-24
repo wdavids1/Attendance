@@ -74,10 +74,6 @@ public class StudentInCourseEditFragment extends DialogFragment {
         listener = (EditStudentInCourseListener)context;
     }
 
-    //public void setStudent(Student student) { this.student(student); }
-
-    //public void setLastName(String lastName) { this.lastName.setText(lastName);}
-
     private void closeButtonClicked(View v) {
         this.dismiss();
     }

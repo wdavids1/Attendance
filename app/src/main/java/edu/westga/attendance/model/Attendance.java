@@ -18,16 +18,16 @@ public class Attendance {
     }
 
     public Attendance(int id, StudentInCourse studentInCourse, String date, int present) {
-        this.id = id;
-        this.studentInCourse = studentInCourse;
-        this.date = date;
-        this.present = present;
+        setId(id);
+        setStudentInCourse(studentInCourse);
+        setDate(date);
+        setPresent(present);
     }
 
     public Attendance(StudentInCourse studentInCourse, String date, int present) {
-        this.studentInCourse = studentInCourse;
-        this.date = date;
-        this.present = present;
+        setStudentInCourse(studentInCourse);
+        setDate(date);
+        setPresent(present);
     }
 
     public void setId(int id) { this.id = id; }
@@ -35,18 +35,29 @@ public class Attendance {
     public int getId() { return this.id; }
 
     public void setStudentInCourse(StudentInCourse studentInCourse) {
+        if (studentInCourse == null) {
+            throw new IllegalArgumentException("StudentInCourse must not be null");
+        }
         this.studentInCourse = studentInCourse;
     }
 
     public StudentInCourse getStudentInCourse(){ return this.studentInCourse; }
 
     public void setDate(String date) {
+
+        if (date == null || date.isEmpty()) {
+            throw new IllegalArgumentException("Date must not be null");
+        }
         this.date = date;
     }
 
     public String getDate() { return this.date; }
 
-    public void setPresent(int present) { this.present = present; }
+    public void setPresent(int present) {
+        if (present < 0 || present > 1) {
+            throw new IllegalArgumentException("Present must be 0 or 1");
+        }
+        this.present = present; }
 
     public int getPresent() { return this.present; }
 

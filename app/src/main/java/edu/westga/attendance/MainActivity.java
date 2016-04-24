@@ -22,11 +22,10 @@ import edu.westga.attendance.model.Course;
 import edu.westga.attendance.model.Student;
 import edu.westga.attendance.model.StudentInCourse;
 
-public class MainActivity extends AppCompatActivity implements StudentEditFragment.EditStudentListener, StudentDisplayFragment.StudentDisplayListener, CourseEditFragment.EditCourseListener, StudentInCourseEditFragment.EditStudentInCourseListener,
+public class MainActivity extends AppCompatActivity implements StudentEditFragment.EditStudentListener, CourseEditFragment.EditCourseListener, StudentInCourseEditFragment.EditStudentInCourseListener,
 takeAttendanceFragment.TakeAttendanceListener, selectCourseDateReportFragment.ViewResultListener, selectCourseDateRangeReportFragment.ViewResultListener, selectStudentDateReportFragment.ViewResultListener, selectStudentDateRangeReportFragment.ViewResultListener {
 
     private Spinner course;
-    private Spinner courseReport;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,15 +39,6 @@ takeAttendanceFragment.TakeAttendanceListener, selectCourseDateReportFragment.Vi
             Toast.makeText(getApplicationContext(), "An error has occured: " + e.getMessage(), Toast.LENGTH_LONG).show();
         }
         setSupportActionBar(toolbar);
-
-        //FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        //fab.setOnClickListener(new View.OnClickListener() {
-        //    @Override
-        //   public void onClick(View view) {
-        //        Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-        //                .setAction("Action", null).show();
-        //    }
-        //});
     }
 
     @Override
@@ -71,11 +61,6 @@ takeAttendanceFragment.TakeAttendanceListener, selectCourseDateReportFragment.Vi
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onStudentDisplay() {
-
     }
 
     public void onAddStudentButtonClick(View view) {
@@ -311,7 +296,6 @@ takeAttendanceFragment.TakeAttendanceListener, selectCourseDateReportFragment.Vi
             Toast.makeText(getApplicationContext(), "An error has occured: " + e.getMessage(), Toast.LENGTH_LONG).show();
             return;
         }
-
 
         try {
             FragmentManager fm = getFragmentManager();

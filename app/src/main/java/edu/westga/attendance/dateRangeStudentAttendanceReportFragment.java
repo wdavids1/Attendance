@@ -16,8 +16,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
-import edu.westga.attendance.DBHandler;
-import edu.westga.attendance.R;
 import edu.westga.attendance.model.Attendance;
 import edu.westga.attendance.model.Student;
 

@@ -135,29 +135,6 @@ public class DBHandler extends SQLiteOpenHelper {
         db.close();
     }
 
-    public Student findStudent(String firstName, String lastName) {
-        String query = "Select * FROM " + TABLE_STUDENT + " WHERE " + COLUMN_FIRSTNAME + " =  \"" + firstName + "\""
-                + " AND " + COLUMN_LASTNAME + " =  \"" + lastName + "\"";
-
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        Cursor cursor = db.rawQuery(query, null);
-
-        Student student = new Student();
-
-        if (cursor.moveToFirst()) {
-            cursor.moveToFirst();
-            student.setStudentID(Integer.parseInt(cursor.getString(0)));
-            student.setFirstName(cursor.getString(1));
-            student.setLastName(cursor.getString(2));
-            cursor.close();
-        } else {
-            student = null;
-        }
-        db.close();
-        return student;
-    }
-
     public int checkIfStudentExists(String firstName, String lastName) {
         String query = "Select COUNT(*) FROM " + TABLE_STUDENT + " WHERE " + COLUMN_FIRSTNAME + " =  \"" + firstName + "\""
                 + " AND " + COLUMN_LASTNAME + " =  \"" + lastName + "\"";
@@ -176,27 +153,6 @@ public class DBHandler extends SQLiteOpenHelper {
 
         db.close();
         return count;
-    }
-
-    public Course findCourse(String courseName) {
-        String query = "Select * FROM " + TABLE_COURSE + " WHERE " + COLUMN_COURSENAME + " =  \"" + courseName + "\"";
-
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        Cursor cursor = db.rawQuery(query, null);
-
-        Course course = new Course();
-
-        if (cursor.moveToFirst()) {
-            cursor.moveToFirst();
-            course.setCourseID(Integer.parseInt(cursor.getString(0)));
-            course.setCourseName(cursor.getString(1));
-            cursor.close();
-        } else {
-            course = null;
-        }
-        db.close();
-        return course;
     }
 
     public int checkIfCourseExists(String courseName) {
@@ -609,35 +565,6 @@ public class DBHandler extends SQLiteOpenHelper {
         }
         db.close();
         return students;
-    }
-
-    public ArrayList<Attendance> getAllAttendance() {
-        ArrayList<Attendance> attendances = new ArrayList<>();
-
-        String query = "Select * FROM " + TABLE_ATTENDANCE ;
-
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        Cursor cursor = db.rawQuery(query, null);
-
-        if (cursor != null) {
-            if (cursor.moveToFirst()) {
-                do {
-                    Attendance attendance = new Attendance();
-                    attendance.setId(Integer.parseInt(cursor.getString(0)));
-                    //attendance.setStudentInCourse(Integer.parseInt(cursor.getString(1)));
-                    attendance.setDate(cursor.getString(2));
-                    attendance.setPresent(Integer.parseInt(cursor.getString(3)));
-
-                    attendances.add(attendance);
-                } while (cursor.moveToNext());
-
-            }
-            cursor.close();
-        }
-
-        db.close();
-        return attendances;
     }
 
     public void rebuildDB() {

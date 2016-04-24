@@ -19,14 +19,14 @@ public class StudentInCourse {
     }
 
     public StudentInCourse(int id, Student student, Course course) {
-        this.id = id;
-        this.student = student;
-        this.course = course;
+        setID(id);
+        setStudent(student);
+        setCourse(course);
     }
 
     public StudentInCourse(Student student, Course course) {
-        this.student = student;
-        this.course = course;
+        setStudent(student);
+        setCourse(course);
     }
 
     public void setID(int id) {
@@ -36,14 +36,25 @@ public class StudentInCourse {
     public int getId() { return this.id; }
 
     public void setStudent(Student student) {
+        if (student == null) {
+            throw new IllegalArgumentException("Student must not be null");
+        }
         this.student = student;
     }
 
     public Student getStudent() { return this.student; }
 
     public void setCourse(Course course) {
+        if (course == null) {
+            throw new IllegalArgumentException("Course must not be null");
+        }
         this.course = course;
     }
 
     public Course getCourse() { return this.course; }
+
+    @Override
+    public String toString() {
+        return student.toString() + ", " + course.toString();
+    }
 }

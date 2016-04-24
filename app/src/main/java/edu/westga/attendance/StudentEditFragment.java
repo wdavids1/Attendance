@@ -1,8 +1,6 @@
 package edu.westga.attendance;
 
 import android.app.DialogFragment;
-import android.app.FragmentManager;
-import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,9 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
-
-import edu.westga.attendance.R;
 
 /**
  * Created by Wayne on 4/9/2016.
@@ -73,8 +68,4 @@ public class StudentEditFragment extends DialogFragment {
         super.onAttach(context);
         listener = (EditStudentListener)context;
     }
-
-    public void setFirstName(String firstName) { this.firstName.setText(firstName); }
-
-    public void setLastName(String lastName) { this.lastName.setText(lastName);}
 }
