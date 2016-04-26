@@ -17,4 +17,14 @@
         android:orderInCategory="100"
         android:title="Add Student To Course"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/action_clearDB"
+        android:orderInCategory="100"
+        android:title="Delete All Data"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_rebuildDB"
+        android:orderInCategory="100"
+        android:title="Delete All Data and Load Test Data"
+        app:showAsAction="never" />
 </menu>

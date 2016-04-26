@@ -223,7 +223,8 @@ public class DBHandler extends SQLiteOpenHelper {
                 + " JOIN student ON studentincourse.studentid = student.studentid"
                 + " JOIN course ON studentincourse.courseid = course.courseid"
                 + " WHERE studentincourse.courseid =  \"" + course.getCourseID() + "\""
-                + " AND attendance.classdate =  \"" + date + "\"";
+                + " AND attendance.classdate =  \"" + date + "\""
+                + " Order by student.lastname, student.firstname ";
 
         ArrayList<Attendance> attendances = new ArrayList<>();
 
@@ -274,7 +275,8 @@ public class DBHandler extends SQLiteOpenHelper {
                 + " JOIN student ON studentincourse.studentid = student.studentid"
                 + " JOIN course ON studentincourse.courseid = course.courseid"
                 + " WHERE studentincourse.studentid =  \"" + student.getStudentID() + "\""
-                + " AND attendance.classdate =  \"" + date + "\"";
+                + " AND attendance.classdate =  \"" + date + "\""
+                + " Order by course.coursename ";
 
         ArrayList<Attendance> attendances = new ArrayList<>();
 
@@ -328,7 +330,8 @@ public class DBHandler extends SQLiteOpenHelper {
                 + " JOIN course ON studentincourse.courseid = course.courseid"
                 + " WHERE studentincourse.courseid =  \"" + course.getCourseID() + "\""
                 + " AND attendance.classdate BETWEEN  \"" + startDate + "\" AND \"" + endDate + "\""
-                + " GROUP BY student.studentid";
+                + " GROUP BY student.studentid"
+                + " Order By student.lastname, student.firstname ";
 
         ArrayList<Attendance> attendances = new ArrayList<>();
 
@@ -383,7 +386,8 @@ public class DBHandler extends SQLiteOpenHelper {
                 + " JOIN course ON studentincourse.courseid = course.courseid"
                 + " WHERE studentincourse.studentid =  \"" + student.getStudentID() + "\""
                 + " AND attendance.classdate BETWEEN  \"" + startDate + "\" AND \"" + endDate + "\""
-                + " GROUP BY course.courseid";
+                + " GROUP BY course.courseid"
+                + " Order By course.coursename ";
 
         ArrayList<Attendance> attendances = new ArrayList<>();
 
@@ -475,7 +479,7 @@ public class DBHandler extends SQLiteOpenHelper {
     public List<Student> getAllStudents() {
         List<Student> students = new ArrayList<>();
 
-        String query = "Select * FROM " + TABLE_STUDENT ;
+        String query = "Select * FROM " + TABLE_STUDENT + " Order By lastname, firstname " ;
 
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -503,7 +507,7 @@ public class DBHandler extends SQLiteOpenHelper {
     public List<Course> getAllCourses() {
         List<Course> courses = new ArrayList<>();
 
-        String query = "Select * FROM " + TABLE_COURSE ;
+        String query = "Select * FROM " + TABLE_COURSE + " Order By coursename";
 
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -533,7 +537,8 @@ public class DBHandler extends SQLiteOpenHelper {
         String query = "Select id, student.studentid, firstname, lastname, coursename "
             + "FROM student JOIN studentincourse ON student.studentid = studentincourse.studentid "
                 + "JOIN course ON studentincourse.courseid = course.courseid "
-            + "WHERE studentincourse.courseid" + " = " + courseID;
+            + "WHERE studentincourse.courseid" + " = " + courseID
+                + " Order By student.lastname, student.firstname";
 
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -565,6 +570,14 @@ public class DBHandler extends SQLiteOpenHelper {
         }
         db.close();
         return students;
+    }
+
+    public void clearAllData() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("DELETE FROM " + TABLE_ATTENDANCE);
+        db.execSQL("DELETE FROM " + TABLE_STUDENTINCOURSE);
+        db.execSQL("DELETE FROM " + TABLE_STUDENT);
+        db.execSQL("DELETE FROM " + TABLE_COURSE);
     }
 
     public void rebuildDB() {

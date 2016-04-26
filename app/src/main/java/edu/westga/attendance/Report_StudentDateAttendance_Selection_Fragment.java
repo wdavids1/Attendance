@@ -12,23 +12,23 @@ import android.widget.Spinner;
 
 import java.util.List;
 
-import edu.westga.attendance.model.Course;
+import edu.westga.attendance.model.Student;
 
 /**
  * Created by Wayne on 4/16/2016.
  *
- * View to pick a course and date to get a report for
+ * View to pick a student and date to get a report for
  */
-public class selectCourseDateReportFragment extends DialogFragment {
-    private Spinner course;
+public class Report_StudentDateAttendance_Selection_Fragment extends DialogFragment {
+    private Spinner student;
     private ViewResultListener listener;
     private DatePicker datePicker;
 
     interface ViewResultListener {
-        void onViewCourseDateReport(Course course, String date);
+        void onViewStudentDateReport(Student student, String date);
     }
 
-    public selectCourseDateReportFragment() {
+    public Report_StudentDateAttendance_Selection_Fragment() {
 
     }
 
@@ -37,11 +37,11 @@ public class selectCourseDateReportFragment extends DialogFragment {
                              Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment
-        View theView = inflater.inflate(R.layout.coursedatereportselection_fragment, container, false);
+        View theView = inflater.inflate(R.layout.report_student_date_selection_fragment, container, false);
 
-        this.course = (Spinner) theView.findViewById(R.id.coursespinner);
+        this.student = (Spinner) theView.findViewById(R.id.studentspinner);
 
-        this.fillCourseSpinner();
+        this.fillStudentSpinner();
 
         datePicker = (DatePicker) theView.findViewById(R.id.datePicker);
 
@@ -73,7 +73,7 @@ public class selectCourseDateReportFragment extends DialogFragment {
     }
 
     private void viewReportButtonClicked(View v) {
-        Course course = (Course)this.course.getSelectedItem();
+        Student student = (Student)this.student.getSelectedItem();
 
         String day = checkDigit(this.datePicker.getDayOfMonth());
         String month = checkDigit(this.datePicker.getMonth() + 1);
@@ -81,20 +81,20 @@ public class selectCourseDateReportFragment extends DialogFragment {
 
         String date = year + "-" + month + "-" + day;
 
-        listener.onViewCourseDateReport(course, date);
+        listener.onViewStudentDateReport(student, date);
 
         this.dismiss();
     }
 
-    private void fillCourseSpinner() {
-        CourseSpinnerAdapter courseAdapter;
+    private void fillStudentSpinner() {
+        StudentSpinnerAdapter studentAdapter;
         DBHandler dbHandler = new DBHandler(this.getActivity(), null, null, 1);
-        List<Course> courses = dbHandler.getAllCourses();
-        courseAdapter = new CourseSpinnerAdapter(this.getActivity(),
-                android.R.layout.simple_spinner_item , courses );
-        course.setAdapter(courseAdapter);
+        List<Student> students = dbHandler.getAllStudents();
+        studentAdapter = new StudentSpinnerAdapter(this.getActivity(),
+                android.R.layout.simple_spinner_item , students );
+        student.setAdapter(studentAdapter);
 
-        courseAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        studentAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
     }
 
     public String checkDigit(int number)

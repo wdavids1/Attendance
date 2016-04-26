@@ -12,24 +12,24 @@ import android.widget.Spinner;
 
 import java.util.List;
 
-import edu.westga.attendance.model.Course;
+import edu.westga.attendance.model.Student;
 
 /**
  * Created by Wayne on 4/16/2016.
  *
- * View to pick a course and date to get a report for
+ * View to pick a student and date to get a report for
  */
-public class selectCourseDateRangeReportFragment extends DialogFragment {
-    private Spinner course;
+public class Report_StudentDateRangeAttendance_Selection_Fragment extends DialogFragment {
+    private Spinner student;
     private ViewResultListener listener;
     private DatePicker startDate;
     private DatePicker endDate;
 
     interface ViewResultListener {
-        void onViewCourseDateRangeReport(Course course, String startdate, String enddate);
+        void onViewStudentDateRangeReport(Student student, String startdate, String enddate);
     }
 
-    public selectCourseDateRangeReportFragment() {
+    public Report_StudentDateRangeAttendance_Selection_Fragment() {
 
     }
 
@@ -38,11 +38,11 @@ public class selectCourseDateRangeReportFragment extends DialogFragment {
                              Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment
-        View theView = inflater.inflate(R.layout.coursedaterangereportselection_fragment, container, false);
+        View theView = inflater.inflate(R.layout.report_student_date_range_selection_fragment, container, false);
 
-        this.course = (Spinner) theView.findViewById(R.id.coursespinner);
+        this.student = (Spinner) theView.findViewById(R.id.studentspinner);
 
-        this.fillCourseSpinner();
+        this.fillStudentSpinner();
 
         startDate = (DatePicker) theView.findViewById(R.id.startDate);
         endDate = (DatePicker) theView.findViewById(R.id.endDate);
@@ -75,7 +75,7 @@ public class selectCourseDateRangeReportFragment extends DialogFragment {
     }
 
     private void viewReportButtonClicked(View v) {
-        Course course = (Course)this.course.getSelectedItem();
+        Student student = (Student)this.student.getSelectedItem();
 
         String day = checkDigit(this.startDate.getDayOfMonth());
         String month = checkDigit(this.startDate.getMonth() + 1);
@@ -89,20 +89,20 @@ public class selectCourseDateRangeReportFragment extends DialogFragment {
 
         String endDate = endyear + "-" + endmonth + "-" + endday;
 
-        listener.onViewCourseDateRangeReport(course, startDate, endDate);
+        listener.onViewStudentDateRangeReport(student, startDate, endDate);
 
         this.dismiss();
     }
 
-    private void fillCourseSpinner() {
-        CourseSpinnerAdapter courseAdapter;
+    private void fillStudentSpinner() {
+        StudentSpinnerAdapter studentAdapter;
         DBHandler dbHandler = new DBHandler(this.getActivity(), null, null, 1);
-        List<Course> courses = dbHandler.getAllCourses();
-        courseAdapter = new CourseSpinnerAdapter(this.getActivity(),
-                android.R.layout.simple_spinner_item , courses );
-        course.setAdapter(courseAdapter);
+        List<Student> students = dbHandler.getAllStudents();
+        studentAdapter = new StudentSpinnerAdapter(this.getActivity(),
+                android.R.layout.simple_spinner_item , students );
+        student.setAdapter(studentAdapter);
 
-        courseAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        studentAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
     }
 
     public String checkDigit(int number)

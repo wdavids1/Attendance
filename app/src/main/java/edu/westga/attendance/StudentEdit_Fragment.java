@@ -14,7 +14,7 @@ import android.widget.EditText;
  *
  * Fragment to create a student
  */
-public class StudentEditFragment extends DialogFragment {
+public class StudentEdit_Fragment extends DialogFragment {
     private EditText firstName;
     private EditText lastName;
     private EditStudentListener listener;
@@ -23,13 +23,13 @@ public class StudentEditFragment extends DialogFragment {
         void onStudentEdit(String firstName, String lastName);
     }
 
-    public StudentEditFragment() {}
+    public StudentEdit_Fragment() {}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View theView = inflater.inflate(R.layout.student_fragment, container, false);
+        View theView = inflater.inflate(R.layout.student_edit_fragment, container, false);
         this.firstName = (EditText) theView.findViewById(R.id.firstName);
         this.lastName = (EditText) theView.findViewById(R.id.lastName);
 

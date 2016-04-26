@@ -14,7 +14,7 @@ import android.widget.EditText;
  *
  * Fragment for allowing a course to be created
  */
-public class CourseEditFragment extends DialogFragment {
+public class CourseEdit_Fragment extends DialogFragment {
     private EditText courseName;
     private EditCourseListener listener;
 
@@ -22,13 +22,13 @@ public class CourseEditFragment extends DialogFragment {
         void onCourseEdit(String courseName);
     }
 
-    public CourseEditFragment() {}
+    public CourseEdit_Fragment() {}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View theView = inflater.inflate(R.layout.course_fragment, container, false);
+        View theView = inflater.inflate(R.layout.course_edit_fragment, container, false);
         this.courseName = (EditText) theView.findViewById(R.id.courseName);
 
         final Button addButton = (Button) theView.findViewById(R.id.addButton);

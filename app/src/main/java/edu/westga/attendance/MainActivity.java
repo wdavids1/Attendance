@@ -22,8 +22,9 @@ import edu.westga.attendance.model.Course;
 import edu.westga.attendance.model.Student;
 import edu.westga.attendance.model.StudentInCourse;
 
-public class MainActivity extends AppCompatActivity implements StudentEditFragment.EditStudentListener, CourseEditFragment.EditCourseListener, StudentInCourseEditFragment.EditStudentInCourseListener,
-takeAttendanceFragment.TakeAttendanceListener, selectCourseDateReportFragment.ViewResultListener, selectCourseDateRangeReportFragment.ViewResultListener, selectStudentDateReportFragment.ViewResultListener, selectStudentDateRangeReportFragment.ViewResultListener {
+public class MainActivity extends AppCompatActivity implements StudentEdit_Fragment.EditStudentListener, CourseEdit_Fragment.EditCourseListener, StudentInCourseEdit_Fragment.EditStudentInCourseListener,
+Attendance_Fragment.TakeAttendanceListener, Report_CourseDateAttendance_Selection_Fragment.ViewResultListener, Report_CourseDateRangeAttendance_Selection_Fragment.ViewResultListener, Report_StudentDateAttendance_Selection_Fragment.ViewResultListener,
+        Report_StudentDateRangeAttendance_Selection_Fragment.ViewResultListener, ConfirmDialog_Fragment.ConfirmListener {
 
     private Spinner course;
 
@@ -63,7 +64,7 @@ takeAttendanceFragment.TakeAttendanceListener, selectCourseDateReportFragment.Vi
         if (id == R.id.action_addStudent) {
             try {
                 FragmentManager fm = getFragmentManager();
-                StudentEditFragment studentEditFragment = new StudentEditFragment();
+                StudentEdit_Fragment studentEditFragment = new StudentEdit_Fragment();
                 studentEditFragment.show(fm, "Add Student");
             } catch (Exception e) {
                 Toast.makeText(getApplicationContext(), "An error has occured: " + e.getMessage(), Toast.LENGTH_LONG).show();
@@ -74,7 +75,7 @@ takeAttendanceFragment.TakeAttendanceListener, selectCourseDateReportFragment.Vi
         if (id == R.id.action_addCourse) {
             try {
                 FragmentManager fm = getFragmentManager();
-                CourseEditFragment courseEditFragment = new CourseEditFragment();
+                CourseEdit_Fragment courseEditFragment = new CourseEdit_Fragment();
                 courseEditFragment.show(fm, "Add Course");
             } catch (Exception e) {
                 Toast.makeText(getApplicationContext(), "An error has occured: " + e.getMessage(), Toast.LENGTH_LONG).show();
@@ -85,8 +86,34 @@ takeAttendanceFragment.TakeAttendanceListener, selectCourseDateReportFragment.Vi
         if (id == R.id.action_addStudentToCourse) {
             try {
                 FragmentManager fm = getFragmentManager();
-                StudentInCourseEditFragment courseEditFragment = new StudentInCourseEditFragment();
+                StudentInCourseEdit_Fragment courseEditFragment = new StudentInCourseEdit_Fragment();
                 courseEditFragment.show(fm, "Add Course");
+            } catch (Exception e) {
+                Toast.makeText(getApplicationContext(), "An error has occured: " + e.getMessage(), Toast.LENGTH_LONG).show();
+            }
+            return true;
+        }
+
+        if (id == R.id.action_clearDB) {
+            try {
+                FragmentManager fm = getFragmentManager();
+                ConfirmDialog_Fragment confirm = new ConfirmDialog_Fragment();
+                confirm.setMessage("Are you sure you wish to delete all data, this cannot be undone?");
+                confirm.setOption("Clear");
+                confirm.show(fm, "Confirm DB Clear");
+            } catch (Exception e) {
+                Toast.makeText(getApplicationContext(), "An error has occured: " + e.getMessage(), Toast.LENGTH_LONG).show();
+            }
+            return true;
+        }
+
+        if (id == R.id.action_rebuildDB) {
+            try {
+                FragmentManager fm = getFragmentManager();
+                ConfirmDialog_Fragment confirm = new ConfirmDialog_Fragment();
+                confirm.setMessage("Are you sure you wish to delete all data and load test data, this cannot be undone?");
+                confirm.setOption("Test");
+                confirm.show(fm, "Confirm DB Clear and Test Data");
             } catch (Exception e) {
                 Toast.makeText(getApplicationContext(), "An error has occured: " + e.getMessage(), Toast.LENGTH_LONG).show();
             }
@@ -104,7 +131,7 @@ takeAttendanceFragment.TakeAttendanceListener, selectCourseDateReportFragment.Vi
 
             if (db.checkIfAttendanceExists(course) == 0 && db.checkIfCourseHasStudents(course) != 0) {
                 FragmentManager fm = getFragmentManager();
-                takeAttendanceFragment attendanceFragment = new takeAttendanceFragment();
+                Attendance_Fragment attendanceFragment = new Attendance_Fragment();
                 attendanceFragment.setCourseID(course.getCourseID());
                 attendanceFragment.show(fm, "Take Attendance");
             } else {
@@ -118,7 +145,7 @@ takeAttendanceFragment.TakeAttendanceListener, selectCourseDateReportFragment.Vi
     public void onGetAttendanceButtonClick(View view) {
         try {
             FragmentManager fm = getFragmentManager();
-            selectCourseDateReportFragment attendanceFragment = new selectCourseDateReportFragment();
+            Report_CourseDateAttendance_Selection_Fragment attendanceFragment = new Report_CourseDateAttendance_Selection_Fragment();
             attendanceFragment.show(fm, "Get report");
         } catch (Exception e) {
             Toast.makeText(getApplicationContext(), "An error has occured: " + e.getMessage(), Toast.LENGTH_LONG).show();
@@ -128,7 +155,7 @@ takeAttendanceFragment.TakeAttendanceListener, selectCourseDateReportFragment.Vi
     public void onGetAttendanceRangeButtonClick(View view) {
         try {
             FragmentManager fm = getFragmentManager();
-            selectCourseDateRangeReportFragment attendanceFragment = new selectCourseDateRangeReportFragment();
+            Report_CourseDateRangeAttendance_Selection_Fragment attendanceFragment = new Report_CourseDateRangeAttendance_Selection_Fragment();
             attendanceFragment.show(fm, "Get report");
         } catch (Exception e) {
             Toast.makeText(getApplicationContext(), "An error has occured: " + e.getMessage(), Toast.LENGTH_LONG).show();
@@ -138,7 +165,7 @@ takeAttendanceFragment.TakeAttendanceListener, selectCourseDateReportFragment.Vi
     public void onGetStudentAttendanceButtonClick(View view) {
         try {
             FragmentManager fm = getFragmentManager();
-            selectStudentDateReportFragment attendanceFragment = new selectStudentDateReportFragment();
+            Report_StudentDateAttendance_Selection_Fragment attendanceFragment = new Report_StudentDateAttendance_Selection_Fragment();
             attendanceFragment.show(fm, "Get report");
         } catch (Exception e) {
             Toast.makeText(getApplicationContext(), "An error has occured: " + e.getMessage(), Toast.LENGTH_LONG).show();
@@ -148,7 +175,7 @@ takeAttendanceFragment.TakeAttendanceListener, selectCourseDateReportFragment.Vi
     public void onGetStudentAttendanceRangeButtonClick(View view) {
         try {
             FragmentManager fm = getFragmentManager();
-            selectStudentDateRangeReportFragment attendanceFragment = new selectStudentDateRangeReportFragment();
+            Report_StudentDateRangeAttendance_Selection_Fragment attendanceFragment = new Report_StudentDateRangeAttendance_Selection_Fragment();
             attendanceFragment.show(fm, "Get report");
         } catch (Exception e) {
             Toast.makeText(getApplicationContext(), "An error has occured: " + e.getMessage(), Toast.LENGTH_LONG).show();
@@ -252,7 +279,7 @@ takeAttendanceFragment.TakeAttendanceListener, selectCourseDateReportFragment.Vi
     public void onViewCourseDateReport(Course course, String date) {
         try {
             FragmentManager fm = getFragmentManager();
-            dateCourseAttendanceReportFragment attendanceFragment = new dateCourseAttendanceReportFragment();
+            Report_CourseDateAttendance_Fragment attendanceFragment = new Report_CourseDateAttendance_Fragment();
             attendanceFragment.setCourse(course);
             attendanceFragment.setDate(date);
             attendanceFragment.show(fm, "Get report");
@@ -292,7 +319,7 @@ takeAttendanceFragment.TakeAttendanceListener, selectCourseDateReportFragment.Vi
 
         try {
             FragmentManager fm = getFragmentManager();
-            dateRangeCourseAttendanceReportFragment attendanceFragment = new dateRangeCourseAttendanceReportFragment();
+            Report_CourseDateRangeAttendance_Fragment attendanceFragment = new Report_CourseDateRangeAttendance_Fragment();
             attendanceFragment.setCourse(course);
             attendanceFragment.setStartDate(startdate);
             attendanceFragment.setEndDate(enddate);
@@ -306,7 +333,7 @@ takeAttendanceFragment.TakeAttendanceListener, selectCourseDateReportFragment.Vi
     public void onViewStudentDateReport(Student student, String date) {
         try {
             FragmentManager fm = getFragmentManager();
-            dateStudentAttendanceReportFragment attendanceFragment = new dateStudentAttendanceReportFragment();
+            Report_StudentDateAttendance_Fragment attendanceFragment = new Report_StudentDateAttendance_Fragment();
             attendanceFragment.setStudent(student);
             attendanceFragment.setDate(date);
             attendanceFragment.show(fm, "Get report");
@@ -346,13 +373,26 @@ takeAttendanceFragment.TakeAttendanceListener, selectCourseDateReportFragment.Vi
 
         try {
             FragmentManager fm = getFragmentManager();
-            dateRangeStudentAttendanceReportFragment attendanceFragment = new dateRangeStudentAttendanceReportFragment();
+            Report_StudentDateRangeAttendance_Fragment attendanceFragment = new Report_StudentDateRangeAttendance_Fragment();
             attendanceFragment.setStudent(student);
             attendanceFragment.setStartDate(startdate);
             attendanceFragment.setEndDate(enddate);
             attendanceFragment.show(fm, "Get report");
         } catch (Exception e) {
             Toast.makeText(getApplicationContext(), "An error has occured: " + e.getMessage(), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    public void onConfirm(String option) {
+        if (option.equals("Clear")) {
+            DBHandler db = new DBHandler(this, null, null, 1);
+            db.clearAllData();
+            this.fillCourseSpinner();
+        } else if (option.equals("Test")) {
+            DBHandler db = new DBHandler(this, null, null, 1);
+            db.rebuildDB();
+            this.fillCourseSpinner();
         }
     }
 }

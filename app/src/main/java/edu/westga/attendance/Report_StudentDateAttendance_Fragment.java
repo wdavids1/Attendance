@@ -25,14 +25,14 @@ import edu.westga.attendance.model.Student;
  *
  * An attendance report for the selected date and course
  */
-public class dateStudentAttendanceReportFragment extends DialogFragment{
+public class Report_StudentDateAttendance_Fragment extends DialogFragment{
 
     private LinearLayout mLinearListView;
     private Student student;
     private String theDate;
     private ArrayList<Attendance> attendance = new ArrayList<>();
 
-    public dateStudentAttendanceReportFragment() {
+    public Report_StudentDateAttendance_Fragment() {
 
     }
 
@@ -49,7 +49,7 @@ public class dateStudentAttendanceReportFragment extends DialogFragment{
                              Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment
-        View theView = inflater.inflate(R.layout.datestudentattendancereport_fragment, container, false);
+        View theView = inflater.inflate(R.layout.report_student_date_attendance_fragment, container, false);
         mLinearListView = (LinearLayout) theView.findViewById(R.id.linear_listview);
 
         DBHandler dbHandler = new DBHandler(this.getActivity(), null, null, 1);
@@ -65,7 +65,7 @@ public class dateStudentAttendanceReportFragment extends DialogFragment{
 
             for (int i=0; i<attendance.size(); i++) {
                 LayoutInflater inflater1 = (LayoutInflater) this.getActivity().getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                View mLinearView = inflater1.inflate(R.layout.course_list_report_detail, null);
+                View mLinearView = inflater1.inflate(R.layout.report_course_list_item_detail, null);
 
                 final TextView courseName = (TextView) mLinearView.findViewById(R.id.textViewName);
                 final TextView present = (TextView) mLinearView.findViewById(R.id.textViewPresent);

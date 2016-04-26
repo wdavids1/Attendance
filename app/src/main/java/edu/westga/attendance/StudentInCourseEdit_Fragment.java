@@ -20,7 +20,7 @@ import edu.westga.attendance.model.Student;
  *
  * Fragment to put a student in a course
  */
-public class StudentInCourseEditFragment extends DialogFragment {
+public class StudentInCourseEdit_Fragment extends DialogFragment {
     private Spinner student;
     private Spinner course;
     private EditStudentInCourseListener listener;
@@ -29,7 +29,7 @@ public class StudentInCourseEditFragment extends DialogFragment {
         void onStudentInCourseEdit(Student student, Course course);
     }
 
-    public StudentInCourseEditFragment() {}
+    public StudentInCourseEdit_Fragment() {}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

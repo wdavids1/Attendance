@@ -29,7 +29,7 @@ public class StudentDisplayFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View theView = inflater.inflate(R.layout.student_fragment, container, false);
+        View theView = inflater.inflate(R.layout.student_edit_fragment, container, false);
 
         final Button addButton = (Button) theView.findViewById(R.id.addButton);
         addButton.setOnClickListener(new View.OnClickListener() {

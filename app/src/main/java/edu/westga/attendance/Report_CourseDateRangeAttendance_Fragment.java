@@ -24,7 +24,7 @@ import edu.westga.attendance.model.Course;
  *
  * An attendance report for the selected date and course
  */
-public class dateRangeCourseAttendanceReportFragment extends DialogFragment{
+public class Report_CourseDateRangeAttendance_Fragment extends DialogFragment{
 
     private LinearLayout mLinearListView;
     private Course course;
@@ -32,7 +32,7 @@ public class dateRangeCourseAttendanceReportFragment extends DialogFragment{
     private String endDate;
     private ArrayList<Attendance> attendance = new ArrayList<>();
 
-    public dateRangeCourseAttendanceReportFragment() {
+    public Report_CourseDateRangeAttendance_Fragment() {
 
     }
 
@@ -53,7 +53,7 @@ public class dateRangeCourseAttendanceReportFragment extends DialogFragment{
                              Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment
-        View theView = inflater.inflate(R.layout.datecourseattendancereport_fragment, container, false);
+        View theView = inflater.inflate(R.layout.report_course_date_attendance_fragment, container, false);
         mLinearListView = (LinearLayout) theView.findViewById(R.id.linear_listview);
 
         DBHandler dbHandler = new DBHandler(this.getActivity(), null, null, 1);
@@ -68,7 +68,7 @@ public class dateRangeCourseAttendanceReportFragment extends DialogFragment{
 
             for (int i=0; i<attendance.size(); i++) {
                 LayoutInflater inflater1 = (LayoutInflater) this.getActivity().getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                View mLinearView = inflater1.inflate(R.layout.student_list_report_detail, null);
+                View mLinearView = inflater1.inflate(R.layout.report_student_list_item_detail, null);
 
                 final TextView firstName = (TextView) mLinearView.findViewById(R.id.textViewName);
                 final TextView present = (TextView) mLinearView.findViewById(R.id.textViewPresent);
@@ -77,7 +77,7 @@ public class dateRangeCourseAttendanceReportFragment extends DialogFragment{
 
                 String attendanceHistory = "(" + attendance.get(i).getCountPresent()
                         + "/" + daysAbsent
-                        + "/" + attendance.get(i).getCountPresent() + ")";
+                        + "/" + attendance.get(i).getCountDays() + ")";
 
                 final String name = "  " + attendance.get(i).getStudentInCourse().getStudent().getFirstName()
                         + " " + attendance.get(i).getStudentInCourse().getStudent().getLastName();

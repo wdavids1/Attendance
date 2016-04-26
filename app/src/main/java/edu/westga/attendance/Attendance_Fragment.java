@@ -25,7 +25,7 @@ import edu.westga.attendance.model.StudentInCourse;
  *
  * Allows one to take attendance
  */
-public class takeAttendanceFragment extends DialogFragment {
+public class Attendance_Fragment extends DialogFragment {
     private LinearLayout mLinearListView;
     private int courseid;
     private ArrayList<Attendance> attendance = new ArrayList<>();
@@ -35,7 +35,7 @@ public class takeAttendanceFragment extends DialogFragment {
         void onTakeAttendance(ArrayList<Attendance> attendance);
     }
 
-    public takeAttendanceFragment() {
+    public Attendance_Fragment() {
 
     }
 
@@ -48,7 +48,7 @@ public class takeAttendanceFragment extends DialogFragment {
                              Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment
-        View theView = inflater.inflate(R.layout.takeattendance_fragment, container, false);
+        View theView = inflater.inflate(R.layout.attendance_fragment, container, false);
         mLinearListView = (LinearLayout) theView.findViewById(R.id.linear_listview);
 
         DBHandler dbHandler = new DBHandler(this.getActivity(), null, null, 1);
@@ -62,7 +62,7 @@ public class takeAttendanceFragment extends DialogFragment {
             attendance.add(newAttendance);
 
             LayoutInflater inflater1 = (LayoutInflater) this.getActivity().getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View mLinearView = inflater1.inflate(R.layout.student_list_detail, null);
+            View mLinearView = inflater1.inflate(R.layout.attendance_student_list_item_detail, null);
 
             final TextView firstName = (TextView) mLinearView.findViewById(R.id.textViewName);
             final TextView textid = (TextView) mLinearView.findViewById(R.id.textViewID);
