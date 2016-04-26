@@ -79,4 +79,13 @@
         style="@style/button"
         android:onClick="onGetStudentAttendanceRangeButtonClick" />
 
+    <Button
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:text="Get Student Course Attendance Detail"
+        android:id="@+id/getStudentCourseAttendanceDetailButton"
+        android:layout_gravity="center_horizontal"
+        style="@style/button"
+        android:onClick="onGetStudentCourseAttendanceDetailButtonClick" />
+
 </LinearLayout>

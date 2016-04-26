@@ -434,6 +434,61 @@ public class DBHandler extends SQLiteOpenHelper {
         return attendances;
     }
 
+    public ArrayList<Attendance> getAttendanceForStudentCourseDateRange(Student student, Course course, String startDate, String endDate) {
+        String query = "Select attendance.id, attendance.present, attendance.classdate, studentincourse.id, "
+                + " student.studentid, student.firstname, student.lastname, "
+                + " course.coursename, course.courseid FROM " + TABLE_ATTENDANCE
+                + " LEFT JOIN studentincourse ON attendance.studentcourseid = studentincourse.id"
+                + " JOIN student ON studentincourse.studentid = student.studentid"
+                + " JOIN course ON studentincourse.courseid = course.courseid"
+                + " WHERE studentincourse.studentid =  \"" + student.getStudentID() + "\""
+                + " AND studentincourse.courseid = \"" + course.getCourseID() + "\""
+                + " AND attendance.classdate BETWEEN  \"" + startDate + "\" AND \"" + endDate + "\""
+                + " Order By attendance.classdate ";
+
+        ArrayList<Attendance> attendances = new ArrayList<>();
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                do {
+                    Attendance attendance = new Attendance();
+                    attendance.setId(Integer.parseInt(cursor.getString(0)));
+                    attendance.setPresent(Integer.parseInt(cursor.getString(1)));
+                    attendance.setDate(cursor.getString(2));
+
+                    StudentInCourse studentInCourse = new StudentInCourse();
+                    studentInCourse.setID(Integer.parseInt(cursor.getString(3)));
+
+                    Student newStudent = new Student();
+                    newStudent.setStudentID(Integer.parseInt(cursor.getString(4)));
+                    newStudent.setFirstName(cursor.getString(5));
+                    newStudent.setLastName(cursor.getString(6));
+
+                    studentInCourse.setStudent(newStudent);
+
+                    Course newCourse = new Course();
+                    newCourse.setCourseID(Integer.parseInt(cursor.getString(8)));
+                    newCourse.setCourseName(cursor.getString(7));
+
+                    studentInCourse.setCourse(newCourse);
+
+                    attendance.setStudentInCourse(studentInCourse);
+
+                    attendances.add(attendance);
+                } while (cursor.moveToNext());
+
+            }
+            cursor.close();
+        }
+
+        db.close();
+        return attendances;
+    }
+
     public int checkIfAttendanceExists(Course course) {
         String query = "Select COUNT(*) FROM " + TABLE_ATTENDANCE
                 + " JOIN studentincourse ON attendance.studentcourseid = studentincourse.id "

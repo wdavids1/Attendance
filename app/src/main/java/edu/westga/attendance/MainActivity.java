@@ -24,7 +24,7 @@ import edu.westga.attendance.model.StudentInCourse;
 
 public class MainActivity extends AppCompatActivity implements StudentEdit_Fragment.EditStudentListener, CourseEdit_Fragment.EditCourseListener, StudentInCourseEdit_Fragment.EditStudentInCourseListener,
 Attendance_Fragment.TakeAttendanceListener, Report_CourseDateAttendance_Selection_Fragment.ViewResultListener, Report_CourseDateRangeAttendance_Selection_Fragment.ViewResultListener, Report_StudentDateAttendance_Selection_Fragment.ViewResultListener,
-        Report_StudentDateRangeAttendance_Selection_Fragment.ViewResultListener, ConfirmDialog_Fragment.ConfirmListener {
+        Report_StudentDateRangeAttendance_Selection_Fragment.ViewResultListener, ConfirmDialog_Fragment.ConfirmListener, Report_StudentCourseDateRangeAttendance_Selection_Fragment.ViewResultListener {
 
     private Spinner course;
 
@@ -176,6 +176,16 @@ Attendance_Fragment.TakeAttendanceListener, Report_CourseDateAttendance_Selectio
         try {
             FragmentManager fm = getFragmentManager();
             Report_StudentDateRangeAttendance_Selection_Fragment attendanceFragment = new Report_StudentDateRangeAttendance_Selection_Fragment();
+            attendanceFragment.show(fm, "Get report");
+        } catch (Exception e) {
+            Toast.makeText(getApplicationContext(), "An error has occured: " + e.getMessage(), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public void onGetStudentCourseAttendanceDetailButtonClick(View view) {
+        try {
+            FragmentManager fm = getFragmentManager();
+            Report_StudentCourseDateRangeAttendance_Selection_Fragment attendanceFragment = new Report_StudentCourseDateRangeAttendance_Selection_Fragment();
             attendanceFragment.show(fm, "Get report");
         } catch (Exception e) {
             Toast.makeText(getApplicationContext(), "An error has occured: " + e.getMessage(), Toast.LENGTH_LONG).show();
@@ -393,6 +403,48 @@ Attendance_Fragment.TakeAttendanceListener, Report_CourseDateAttendance_Selectio
             DBHandler db = new DBHandler(this, null, null, 1);
             db.rebuildDB();
             this.fillCourseSpinner();
+        }
+    }
+
+    @Override
+    public void onViewStudentDateRangeReport(Student student, Course course, String startdate, String enddate) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat(
+                "yyyy-MM-dd", Locale.getDefault());
+
+        Date sdate = null;
+        try {
+            sdate = dateFormat.parse(startdate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        Date edate = null;
+        try {
+            edate = dateFormat.parse(enddate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            if (sdate.after(edate)) {
+                Toast.makeText(getApplicationContext(), "Start date is after End date. ", Toast.LENGTH_LONG).show();
+                return;
+            }
+        } catch (Exception e) {
+            Toast.makeText(getApplicationContext(), "An error has occured: " + e.getMessage(), Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        try {
+            FragmentManager fm = getFragmentManager();
+            Report_StudentCourseDateRangeAttendance_Fragment attendanceFragment = new Report_StudentCourseDateRangeAttendance_Fragment();
+            attendanceFragment.setStudent(student);
+            attendanceFragment.setCourse(course);
+            attendanceFragment.setStartDate(startdate);
+            attendanceFragment.setEndDate(enddate);
+            attendanceFragment.show(fm, "Get report");
+        } catch (Exception e) {
+            Toast.makeText(getApplicationContext(), "An error has occured: " + e.getMessage(), Toast.LENGTH_LONG).show();
         }
     }
 }

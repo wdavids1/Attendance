@@ -210,4 +210,55 @@ public class ReportQueryTests extends ActivityInstrumentationTestCase2<MainActiv
 
         activity.finish();
     }
+
+    public void testGetAttendanceForStudentCourseDateRangeSize() {
+        MainActivity activity = getActivity();
+        DBHandler db = new DBHandler(activity.getApplicationContext(), null, null, 1);
+        db.rebuildDB();
+
+        Student wayne = new Student(1, "Wayne", "Davidson");
+        Course cs101 = new Course(1, "CS101");
+        String aDate = "2016-04-15";
+        String bDate = "2016-04-30";
+
+        ArrayList<Attendance> result = db.getAttendanceForStudentCourseDateRange(wayne, cs101, aDate, bDate);
+
+        assertEquals(3, result.size());
+
+        activity.finish();
+    }
+
+    public void testGetAttendanceForStudentCourseDateRangePresentDay0() {
+        MainActivity activity = getActivity();
+        DBHandler db = new DBHandler(activity.getApplicationContext(), null, null, 1);
+        db.rebuildDB();
+
+        Student wayne = new Student(1, "Wayne", "Davidson");
+        Course cs101 = new Course(1, "CS101");
+        String aDate = "2016-04-15";
+        String bDate = "2016-04-30";
+
+        ArrayList<Attendance> result = db.getAttendanceForStudentCourseDateRange(wayne, cs101, aDate, bDate);
+
+        assertEquals(1, result.get(0).getPresent());
+
+        activity.finish();
+    }
+
+    public void testGetAttendanceForStudentCourseDateRangeAbsentDay1() {
+        MainActivity activity = getActivity();
+        DBHandler db = new DBHandler(activity.getApplicationContext(), null, null, 1);
+        db.rebuildDB();
+
+        Student wayne = new Student(1, "Wayne", "Davidson");
+        Course cs101 = new Course(1, "CS101");
+        String aDate = "2016-04-15";
+        String bDate = "2016-04-30";
+
+        ArrayList<Attendance> result = db.getAttendanceForStudentCourseDateRange(wayne, cs101, aDate, bDate);
+
+        assertEquals(0, result.get(1).getPresent());
+
+        activity.finish();
+    }
 }
