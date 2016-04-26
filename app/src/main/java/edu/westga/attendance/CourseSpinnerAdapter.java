@@ -69,7 +69,7 @@ public class CourseSpinnerAdapter extends ArrayAdapter<Course> {
         label.setTextSize(18);
         label.setText(mValues.get(position).getCourseName());
         label.setHeight(70);
-        label.setGravity(Gravity.CENTER );
+        label.setGravity(Gravity.CENTER);
 
         return label;
     }

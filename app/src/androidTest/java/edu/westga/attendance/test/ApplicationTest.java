@@ -1,4 +1,4 @@
-package edu.westga.attendance;
+package edu.westga.attendance.test;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

@@ -136,8 +136,8 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
     public int checkIfStudentExists(String firstName, String lastName) {
-        String query = "Select COUNT(*) FROM " + TABLE_STUDENT + " WHERE " + COLUMN_FIRSTNAME + " =  \"" + firstName + "\""
-                + " AND " + COLUMN_LASTNAME + " =  \"" + lastName + "\"";
+        String query = "Select COUNT(*) FROM " + TABLE_STUDENT + " WHERE " + COLUMN_FIRSTNAME + " =  \"" + firstName + "\" COLLATE NOCASE"
+                + " AND " + COLUMN_LASTNAME + " =  \"" + lastName + "\" COLLATE NOCASE";
 
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -156,7 +156,7 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
     public int checkIfCourseExists(String courseName) {
-        String query = "Select COUNT(*) FROM " + TABLE_COURSE + " WHERE " + COLUMN_COURSENAME + " =  \"" + courseName + "\"";
+        String query = "Select COUNT(*) FROM " + TABLE_COURSE + " WHERE " + COLUMN_COURSENAME + " =  \"" + courseName + "\" COLLATE NOCASE";
 
         SQLiteDatabase db = this.getWritableDatabase();
 

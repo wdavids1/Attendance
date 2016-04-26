@@ -56,41 +56,44 @@ takeAttendanceFragment.TakeAttendanceListener, selectCourseDateReportFragment.Vi
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        //if (id == R.id.action_settings) {
+        //    return true;
+        //}
+
+        if (id == R.id.action_addStudent) {
+            try {
+                FragmentManager fm = getFragmentManager();
+                StudentEditFragment studentEditFragment = new StudentEditFragment();
+                studentEditFragment.show(fm, "Add Student");
+            } catch (Exception e) {
+                Toast.makeText(getApplicationContext(), "An error has occured: " + e.getMessage(), Toast.LENGTH_LONG).show();
+            }
+            return true;
+        }
+
+        if (id == R.id.action_addCourse) {
+            try {
+                FragmentManager fm = getFragmentManager();
+                CourseEditFragment courseEditFragment = new CourseEditFragment();
+                courseEditFragment.show(fm, "Add Course");
+            } catch (Exception e) {
+                Toast.makeText(getApplicationContext(), "An error has occured: " + e.getMessage(), Toast.LENGTH_LONG).show();
+            }
+            return true;
+        }
+
+        if (id == R.id.action_addStudentToCourse) {
+            try {
+                FragmentManager fm = getFragmentManager();
+                StudentInCourseEditFragment courseEditFragment = new StudentInCourseEditFragment();
+                courseEditFragment.show(fm, "Add Course");
+            } catch (Exception e) {
+                Toast.makeText(getApplicationContext(), "An error has occured: " + e.getMessage(), Toast.LENGTH_LONG).show();
+            }
             return true;
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    public void onAddStudentButtonClick(View view) {
-        try {
-            FragmentManager fm = getFragmentManager();
-            StudentEditFragment studentEditFragment = new StudentEditFragment();
-            studentEditFragment.show(fm, "Add Student");
-        } catch (Exception e) {
-            Toast.makeText(getApplicationContext(), "An error has occured: " + e.getMessage(), Toast.LENGTH_LONG).show();
-        }
-    }
-
-    public void onAddCourseButtonClick(View view) {
-        try {
-            FragmentManager fm = getFragmentManager();
-            CourseEditFragment courseEditFragment = new CourseEditFragment();
-            courseEditFragment.show(fm, "Add Course");
-        } catch (Exception e) {
-            Toast.makeText(getApplicationContext(), "An error has occured: " + e.getMessage(), Toast.LENGTH_LONG).show();
-        }
-    }
-
-    public void onAddStudentToCourseButtonClick(View view) {
-        try {
-            FragmentManager fm = getFragmentManager();
-            StudentInCourseEditFragment courseEditFragment = new StudentInCourseEditFragment();
-            courseEditFragment.show(fm, "Add Course");
-        } catch (Exception e) {
-            Toast.makeText(getApplicationContext(), "An error has occured: " + e.getMessage(), Toast.LENGTH_LONG).show();
-        }
     }
 
     public void onTakeAttendanceButtonClick(View view) {
@@ -147,16 +150,6 @@ takeAttendanceFragment.TakeAttendanceListener, selectCourseDateReportFragment.Vi
             FragmentManager fm = getFragmentManager();
             selectStudentDateRangeReportFragment attendanceFragment = new selectStudentDateRangeReportFragment();
             attendanceFragment.show(fm, "Get report");
-        } catch (Exception e) {
-            Toast.makeText(getApplicationContext(), "An error has occured: " + e.getMessage(), Toast.LENGTH_LONG).show();
-        }
-    }
-
-    public void onRebuildDBButtonClick(View view) {
-        try {
-            DBHandler db = new DBHandler(this, null, null, 1);
-            db.rebuildDB();
-            this.fillCourseSpinner();
         } catch (Exception e) {
             Toast.makeText(getApplicationContext(), "An error has occured: " + e.getMessage(), Toast.LENGTH_LONG).show();
         }
